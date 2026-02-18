@@ -1,0 +1,16 @@
+export const countries = [
+    { code: 'LK', name: 'Sri Lanka', dial: '+94' },
+    { code: 'US', name: 'United States', dial: '+1' },
+    { code: 'GB', name: 'United Kingdom', dial: '+44' },
+    { code: 'AU', name: 'Australia', dial: '+61' },
+    { code: 'CA', name: 'Canada', dial: '+1' },
+    { code: 'IN', name: 'India', dial: '+91' },
+    { code: 'SG', name: 'Singapore', dial: '+65' },
+    { code: 'MY', name: 'Malaysia', dial: '+60' },
+    { code: 'DE', name: 'Germany', dial: '+49' },
+    { code: 'FR', name: 'France', dial: '+33' },
+    { code: 'AE', name: 'United Arab Emirates', dial: '+971' },
+    { code: 'RU', name: 'Russia', dial: '+7' },
+    { code: 'CN', name: 'China', dial: '+86' },
+    { code: 'JP', name: 'Japan', dial: '+81' },
+].sort((a, b) => a.name.localeCompare(b.name));

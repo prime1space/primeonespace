@@ -1,0 +1,67 @@
+RewriteEngine On
+
+# CORS headers
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, set-auth-token"
+Header always set Access-Control-Expose-Headers "set-auth-token"
+Header always set Access-Control-Allow-Credentials "true"
+
+# Handle preflight OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ - [R=200,L]
+
+# Redirect /api/pricing to pricing.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^pricing$ pricing.php [L]
+
+# Redirect /api/announcements to announcements.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^announcements$ announcements.php [L]
+
+# Redirect /api/offers to offers.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^offers$ offers.php [L]
+
+# Redirect /api/spaces to spaces.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^spaces$ spaces.php [L]
+
+# Redirect /api/bookings to bookings.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^bookings$ bookings.php [L]
+
+# Redirect /api/testimonials to testimonials.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^testimonials$ testimonials.php [L]
+
+# Redirect /api/events to events.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^events$ events.php [L]
+
+# Redirect /api/settings to settings.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^settings$ settings.php [L]
+
+# Redirect /api/user/profile to user_profile.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^user/profile$ user_profile.php [L]
+
+# Redirect /api/payhere/notify to payhere_notify.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^payhere/notify$ payhere_notify.php [L]
+
+# Redirect /api/auth/* to auth.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^auth/(.*)$ auth.php [L]

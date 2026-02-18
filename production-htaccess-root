@@ -1,0 +1,29 @@
+# Root .htaccess for cPanel hosting
+RewriteEngine On
+
+# Handle Next.js static files
+RewriteCond %{REQUEST_URI} ^/_next/static/
+RewriteRule ^(.*)$ /frontend/out/$1 [L]
+
+# Handle API requests
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ /backend/php/api/$1 [L]
+
+# Handle uploads
+RewriteCond %{REQUEST_URI} ^/uploads/
+RewriteRule ^uploads/(.*)$ /backend/php/api/uploads/$1 [L]
+
+# Handle all other requests to Next.js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /frontend/out/$1 [L]
+
+# Default to index.html for SPA
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /frontend/out/index.html [L]
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"

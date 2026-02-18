@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # API routes - MUST come first
+  RewriteRule ^api/sign-up/email$ /backend/php/api/sign-up.php [L]
+  RewriteRule ^api/get-session$ /backend/php/api/get-session.php [L]
+  RewriteRule ^api/(.*)$ /backend/php/api/$1 [L]
+  
+  # Frontend routes
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteRule . /index.html [L]
+</IfModule>
