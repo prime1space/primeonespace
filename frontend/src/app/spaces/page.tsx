@@ -122,12 +122,12 @@ export default function SpacesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col w-full overflow-x-hidden">
       {/* Hero Section */}
-      <div className="relative py-24 lg:py-32 overflow-hidden bg-[#14212B] text-white">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3" />
+      <div className="relative py-24 lg:py-32 overflow-hidden bg-[#14212B] text-white w-full max-w-full">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-[150%] max-w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
+          <div className="absolute bottom-0 left-0 w-[150%] max-w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3" />
         </div>
 
         <div className="container relative mx-auto px-4 text-center z-10">
@@ -155,13 +155,13 @@ export default function SpacesPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-full"
         >
           {spaces.map((space) => (
-            <motion.div key={space.id} variants={itemVariants}>
-              <Card className="h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden bg-card group flex flex-col">
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+            <motion.div key={space.id} variants={itemVariants} className="w-full">
+              <Card className="h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden bg-card group flex flex-col w-full">
+                <div className="relative h-64 overflow-hidden w-full">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 w-full" />
                   <img
                     src={fixImageUrl(space.imageUrl)}
                     alt={space.name}
@@ -230,19 +230,19 @@ export default function SpacesPage() {
         </motion.div>
 
         {!session?.user && (
-          <div className="mt-24">
-            <div className="relative rounded-3xl overflow-hidden bg-[#14212B] text-white p-12 text-center shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-primary/10" />
-              <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+          <div className="mt-24 w-full">
+            <div className="relative rounded-3xl overflow-hidden bg-[#14212B] text-white p-8 md:p-12 text-center shadow-2xl w-full">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-primary/10 w-full" />
+              <div className="relative z-10 max-w-2xl mx-auto space-y-6 w-full">
                 <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 px-3 py-1 uppercase tracking-widest text-[10px] font-bold">
                   Get Started
                 </Badge>
-                <h2 className="text-4xl md:text-5xl font-black tracking-tighter">A Place for You.</h2>
-                <p className="text-lg text-zinc-400 font-light leading-relaxed">
+                <h2 className="text-3xl md:text-5xl font-black tracking-tighter">A Place for You.</h2>
+                <p className="text-base md:text-lg text-zinc-400 font-light leading-relaxed">
                   We’ve made it easy to jump in whenever you’re ready. Setting up your account keeps you connected to our space and the special rates we have waiting for you.
                 </p>
                 <div className="pt-4">
-                  <Button asChild size="lg" className="bg-primary hover:bg-white text-white hover:text-[#14212B] rounded-full font-bold px-10 h-14 transition-all duration-300 shadow-xl hover:shadow-2xl">
+                  <Button asChild size="lg" className="bg-primary hover:bg-white text-white hover:text-[#14212B] rounded-full font-bold px-8 md:px-10 h-12 md:h-14 transition-all duration-300 shadow-xl hover:shadow-2xl w-full sm:w-auto">
                     <Link href="/register">Create Account</Link>
                   </Button>
                 </div>

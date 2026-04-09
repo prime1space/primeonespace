@@ -1,6 +1,7 @@
 <?php
 // backend/php/api/bookings.php
 include_once __DIR__ . '/../db.php';
+include_once __DIR__ . '/../send_email.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $userId = getUserId($conn);
@@ -147,12 +148,22 @@ else if ($method == 'POST') {
         $hasNicPassport = in_array('nic_passport', $columns);
         $hasCountry = in_array('country', $columns);
         
+        $paymentStatus = (isset($data['paymentMethod']) && $data['paymentMethod'] === 'card') ? 'paid' : 'pending';
+        $bookingStatus = (isset($data['paymentMethod']) && $data['paymentMethod'] === 'card') ? 'confirmed' : 'pending';
+
         $insertColumns = "user_id, space_id, booking_date, start_time, end_time, duration_type, total_amount, payment_status, booking_status, created_at";
         $insertValues = "?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $insertData = [
             $userId, $data['spaceId'], $data['bookingDate'], $data['startTime'], $data['endTime'],
-            $data['durationType'], $data['totalAmount'], 'pending', 'pending', date('Y-m-d H:i:s')
+            $data['durationType'], $data['totalAmount'], $paymentStatus, $bookingStatus, date('Y-m-d H:i:s')
         ];
+
+        // Ensure payment method is saved if column exists
+        if (in_array('payment_method', $columns) && isset($data['paymentMethod'])) {
+            $insertColumns .= ", payment_method";
+            $insertValues .= ", ?";
+            $insertData[] = $data['paymentMethod'];
+        }
         
         if ($hasGuestPhone) {
             $insertColumns .= ", guest_phone";
@@ -198,6 +209,38 @@ else if ($method == 'POST') {
             }
         }
         
+        // Fetch User and Space details to send the confirmation email
+        try {
+            $userStmt = $conn->prepare("SELECT email, name FROM user WHERE id = ?");
+            $userStmt->execute([$userId]);
+            $userRow = $userStmt->fetch(PDO::FETCH_ASSOC);
+            $userEmail = $userRow ? $userRow['email'] : null;
+            $userName = $userRow ? $userRow['name'] : 'Valued Customer';
+
+            $spaceStmt = $conn->prepare("SELECT name FROM spaces WHERE id = ?");
+            $spaceStmt->execute([$data['spaceId']]);
+            $spaceRow = $spaceStmt->fetch(PDO::FETCH_ASSOC);
+            $spaceName = $spaceRow ? $spaceRow['name'] : 'PrimeOne Space';
+
+            if ($userEmail) {
+                $bookingDetails = [
+                    'id' => $bookingId,
+                    'space_name' => $spaceName,
+                    'date' => $data['bookingDate'],
+                    'start_time' => $data['startTime'],
+                    'end_time' => $data['endTime'],
+                    'total_price' => number_format((float)$data['totalAmount'], 2),
+                    'guest_name' => $userName,
+                    'duration' => $data['durationType'] ?? 'N/A'
+                ];
+                // Send email synchronously (or we could log the result if needed)
+                sendBookingConfirmationEmail($userEmail, $bookingDetails);
+            }
+        } catch (Exception $emailEx) {
+            // Log but don't fail the booking if email fails
+            error_log("Failed to send booking confirmation email for booking $bookingId: " . $emailEx->getMessage());
+        }
+
         echo json_encode(["id" => $bookingId]);
     } catch (PDOException $e) {
         http_response_code(500);
@@ -206,22 +249,48 @@ else if ($method == 'POST') {
 }
 else if ($method == 'PUT') {
     $isAdmin = checkAdmin($conn);
-    if (!$isAdmin) {
-        http_response_code(403);
-        echo json_encode(["error" => "Forbidden: Admin access required"]);
-        exit();
-    }
-
     $data = json_decode(file_get_contents("php://input"), true);
+
     if (!isset($data['id']) || !isset($data['status'])) {
         http_response_code(400);
         echo json_encode(["error" => "Missing booking id or status"]);
         exit();
     }
 
+    $bookingId = (int)$data['id'];
+    $newStatus = $data['status'];
+
+    // Users can cancel their own upcoming bookings; admins can do anything
+    if (!$isAdmin) {
+        // Only cancellation is allowed for regular users
+        if ($newStatus !== 'cancelled') {
+            http_response_code(403);
+            echo json_encode(["error" => "Forbidden: You can only cancel your own bookings"]);
+            exit();
+        }
+
+        // Verify this booking belongs to the logged-in user
+        $ownerCheck = $conn->prepare("SELECT id, booking_date FROM bookings WHERE id = ? AND user_id = ?");
+        $ownerCheck->execute([$bookingId, $userId]);
+        $ownedBooking = $ownerCheck->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ownedBooking) {
+            http_response_code(403);
+            echo json_encode(["error" => "Forbidden: Booking not found or does not belong to you"]);
+            exit();
+        }
+
+        // Prevent cancelling past bookings
+        if (strtotime($ownedBooking['booking_date']) < strtotime('today')) {
+            http_response_code(400);
+            echo json_encode(["error" => "Cannot cancel a past booking"]);
+            exit();
+        }
+    }
+
     try {
         $stmt = $conn->prepare("UPDATE bookings SET booking_status = ? WHERE id = ?");
-        $stmt->execute([$data['status'], $data['id']]);
+        $stmt->execute([$newStatus, $bookingId]);
         echo json_encode(["status" => true, "message" => "Booking status updated"]);
     } catch (PDOException $e) {
         http_response_code(500);

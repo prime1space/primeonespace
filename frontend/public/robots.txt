@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow private/internal pages
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /bookings/cancel/
+Disallow: /forgot-password/
+Disallow: /reset-password/
+
+# Sitemap
+Sitemap: https://primeone.space/sitemap.xml

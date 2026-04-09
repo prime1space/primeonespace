@@ -181,12 +181,12 @@ export default function DashboardPage() {
 
   if (isPending || loading) {
     return (
-      <div className="py-12">
+      <div className="pt-20 sm:pt-28 pb-12">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-12 w-64 mb-8" />
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-32" />
+          <Skeleton className="h-10 w-56 mb-6" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8">
+            {[1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} className="h-28" />
             ))}
           </div>
         </div>
@@ -199,34 +199,41 @@ export default function DashboardPage() {
     .slice(0, 3);
 
   return (
-    <div className="py-12">
+    <div className="pt-20 sm:pt-28 pb-12">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Welcome back, {session?.user?.name}!</h1>
-            <p className="text-muted-foreground">Here's what's happening with your bookings</p>
+        {/* Header — stacks on mobile, side-by-side on md+ */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-1 leading-tight truncate">
+              Welcome back, {session?.user?.name}!
+            </h1>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              Here's what's happening with your bookings
+            </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             <Button
               variant="outline"
-              size="lg"
+              size="sm"
+              className="sm:size-lg"
               onClick={fetchBookings}
               disabled={loading}
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
+              <RefreshCw className={`w-4 h-4 sm:mr-2 ${loading ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">Refresh</span>
             </Button>
-            <Button asChild size="lg">
+            <Button asChild size="sm" className="sm:size-lg">
               <Link href="/spaces">
-                <Plus className="w-4 h-4 mr-2" />
-                New Booking
+                <Plus className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">New Booking</span>
+                <span className="sm:hidden">Book</span>
               </Link>
             </Button>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        {/* Stats — 2 cols on mobile, 4 on md+ */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-12">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Bookings</CardTitle>
@@ -273,27 +280,27 @@ export default function DashboardPage() {
         </div>
 
         {/* Upcoming Bookings */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Upcoming Bookings</h2>
-            <Button asChild variant="outline">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold">Upcoming Bookings</h2>
+            <Button asChild variant="outline" size="sm">
               <Link href="/dashboard/bookings">View All</Link>
             </Button>
           </div>
 
           {upcomingBookingsList.length === 0 ? (
             <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Calendar className="w-12 h-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No upcoming bookings</h3>
-                <p className="text-muted-foreground mb-4">Book a workspace to get started</p>
+              <CardContent className="flex flex-col items-center justify-center py-10 sm:py-12">
+                <Calendar className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground mb-4" />
+                <h3 className="text-base sm:text-lg font-semibold mb-2">No upcoming bookings</h3>
+                <p className="text-muted-foreground text-sm mb-4 text-center">Book a workspace to get started</p>
                 <Button asChild>
                   <Link href="/spaces">Browse Spaces</Link>
                 </Button>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {upcomingBookingsList.map((booking) => (
                 <Card key={booking.id} className="overflow-hidden">
                   <div className="aspect-video overflow-hidden">
@@ -303,10 +310,10 @@ export default function DashboardPage() {
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
-                      <CardTitle className="text-lg">{booking.spaceName}</CardTitle>
-                      <Badge variant={getStatusColor(booking.bookingStatus)}>
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <CardTitle className="text-base sm:text-lg leading-snug">{booking.spaceName}</CardTitle>
+                      <Badge variant={getStatusColor(booking.bookingStatus)} className="shrink-0">
                         {booking.bookingStatus}
                       </Badge>
                     </div>
@@ -320,13 +327,13 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
-                      <span>{booking.startTime} - {booking.endTime}</span>
+                      <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
+                      <span className="truncate">{booking.startTime} - {booking.endTime}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-muted-foreground" />
+                      <DollarSign className="w-4 h-4 text-muted-foreground shrink-0" />
                       <span className="font-semibold">LKR {booking.totalAmount.toLocaleString()}</span>
-                      <Badge variant="outline" className="ml-auto">
+                      <Badge variant="outline" className="ml-auto shrink-0">
                         {booking.paymentStatus}
                       </Badge>
                     </div>
@@ -338,21 +345,21 @@ export default function DashboardPage() {
         </div>
 
         {/* My Events Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">My Events</h2>
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">My Events</h2>
           {eventRegs.length === 0 ? (
             <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <TrendingUp className="w-12 h-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No joined events yet</h3>
-                <p className="text-muted-foreground mb-4">Join workshops and meetups to connect</p>
+              <CardContent className="flex flex-col items-center justify-center py-10 sm:py-12">
+                <TrendingUp className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground mb-4" />
+                <h3 className="text-base sm:text-lg font-semibold mb-2">No joined events yet</h3>
+                <p className="text-muted-foreground text-sm mb-4 text-center">Join workshops and meetups to connect</p>
                 <Button asChild variant="outline">
                   <Link href="/events">Explore Events</Link>
                 </Button>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {eventRegs.slice(0, 3).map((reg) => (
                 <Card key={reg.eventId} className="overflow-hidden">
                   <div className="aspect-video overflow-hidden">
@@ -362,8 +369,8 @@ export default function DashboardPage() {
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <CardHeader>
-                    <CardTitle className="text-lg">{reg.title}</CardTitle>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base sm:text-lg">{reg.title}</CardTitle>
                     <CardDescription>
                       {new Date(reg.eventDate).toLocaleDateString("en-US", {
                         weekday: "long",
@@ -386,7 +393,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <Card className="bg-primary text-primary-foreground">
             <CardHeader>
               <CardTitle>Member Benefits</CardTitle>

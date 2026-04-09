@@ -1,242 +1,159 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import { ArrowLeft, RefreshCw, Clock, DollarSign, AlertCircle, CheckCircle } from "lucide-react";
+import Link from 'next/link';
+import { ArrowLeft, RefreshCw, ShieldCheck, CreditCard, Mail, Search, Clock, CheckCircle } from 'lucide-react';
+import * as motion from "framer-motion/client";
 
 export default function RefundPolicyPage() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-            <div className="container max-w-4xl mx-auto px-4 py-12">
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
-
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-3 mb-2">
-                            <RefreshCw className="w-8 h-8 text-primary" />
-                            <CardTitle className="text-3xl font-bold">Refund & Cancellation Policy</CardTitle>
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+            <main className="pt-32 pb-24 px-6 md:px-12">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="mb-16">
+                        <Link 
+                            href="/" 
+                            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity mb-8"
+                        >
+                            <ArrowLeft size={14} /> Back to Home
+                        </Link>
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-12 h-12 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center shadow-md">
+                                <RefreshCw size={24} />
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-none">
+                                Refund <br /> <span className="italic font-light opacity-50 text-emerald-600 dark:text-emerald-400">Policy.</span>
+                            </h1>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                            Last Updated: February 16, 2026 | Effective Date: February 16, 2026
-                        </p>
-                    </CardHeader>
-                    <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-                        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded mb-6 not-prose">
-                            <p className="text-sm font-medium">
-                                This policy outlines the terms and conditions for canceling bookings and requesting refunds at PrimeOne Coworking Space.
-                            </p>
-                        </div>
+                        <p className="text-sm font-mono opacity-50 uppercase tracking-widest">Last updated: February 16, 2026</p>
+                    </div>
 
-                        <h2 className="flex items-center gap-2">
-                            <Clock className="w-5 h-5" />
-                            1. Cancellation Policy
-                        </h2>
+                    {/* Content */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="max-w-none text-foreground/80 leading-relaxed space-y-16"
+                    >
+                        <section className="space-y-4">
+                            <p className="text-lg font-medium">Thank you for booking with PrimeOne Coworking Space. This policy outlines our cancellation rules and your eligibility for refunds.</p>
+                            <p>By scheduling a booking or utilizing our service, you seamlessly agree to this refund and cancellation protocol.</p>
+                        </section>
 
-                        <h3>1.1 Hourly Bookings</h3>
+                        {/* Cancellation Windows */}
+                        <section className="space-y-8 bg-primary/5 p-8 lg:p-12 rounded-[2.5rem] border border-primary/10">
+                            <div className="flex items-center gap-3">
+                                <Clock className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Cancellation Windows</h2>
+                            </div>
+                            
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">Full Refund</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60 mb-4">&gt; 24 Hours Prior</p>
+                                    <p className="text-sm opacity-80">Cancel at least 24 hours before your structurally scheduled booking to receive a 100% refund of your initial deposit or full payment.</p>
+                                </div>
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">Partial Refund</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60 mb-4">&lt; 24 Hours Prior</p>
+                                    <p className="text-sm opacity-80">Cancellations made within 24 hours of your active booking are functionally eligible for a maximum 50% systematic refund allocation.</p>
+                                </div>
+                            </div>
+                        </section>
 
-                        <div className="grid gap-4 my-4 not-prose">
-                            <div className="border rounded-lg p-4 bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
-                                <div className="flex items-start gap-3">
-                                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                    <div>
-                                        <p className="font-semibold text-green-900 dark:text-green-100">More than 24 hours before booking</p>
-                                        <ul className="text-sm text-green-800 dark:text-green-200 mt-1 space-y-1">
-                                            <li>✅ Full refund (100%)</li>
-                                            <li>✅ No cancellation fee</li>
-                                            <li>✅ Instant processing</li>
+                        {/* Exception Rules */}
+                        <section className="space-y-8">
+                            <div className="flex items-center gap-3 mb-6">
+                                <ShieldCheck className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Eligibility Guidelines</h2>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    <div className="bg-muted/30 p-6 rounded-2xl border border-border shadow-sm">
+                                        <strong className="block text-foreground mb-4 font-mono text-xs uppercase tracking-wider text-emerald-600">Non-Refundable Categories</strong>
+                                        <ul className="list-disc pl-5 space-y-2 text-sm opacity-90">
+                                            <li>Absolutely No-Shows without prior active notification</li>
+                                            <li>Deliberately downgraded bookings finalized post-payment</li>
+                                            <li>Specified promotional discounts expressly marked non-refundable</li>
+                                        </ul>
+                                    </div>
+                                    <div className="bg-muted/30 p-6 rounded-2xl border border-border shadow-sm">
+                                        <strong className="block text-foreground mb-4 font-mono text-xs uppercase tracking-wider text-emerald-600">Administrative Discretion</strong>
+                                        <ul className="list-disc pl-5 space-y-2 text-sm opacity-90">
+                                            <li>Emergencies evaluated strictly on a distinct case-by-case basis</li>
+                                            <li>Facility-driven functional downtime warrants automatic compensation</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+                        </section>
 
-                            <div className="border rounded-lg p-4 bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800">
-                                <div className="flex items-start gap-3">
-                                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                                    <div>
-                                        <p className="font-semibold text-yellow-900 dark:text-yellow-100">12-24 hours before booking</p>
-                                        <ul className="text-sm text-yellow-800 dark:text-yellow-200 mt-1 space-y-1">
-                                            <li>✅ 50% refund</li>
-                                            <li>⚠️ 50% cancellation fee</li>
-                                            <li>⏱️ Processed within 5-7 business days</li>
-                                        </ul>
-                                    </div>
+                        {/* Processing */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4">Refund Processing</h2>
+                            <div className="flex flex-col md:flex-row gap-8 items-center bg-primary text-primary-foreground p-8 lg:p-12 rounded-[2.5rem]">
+                                <div className="flex-1 space-y-4">
+                                    <p className="leading-relaxed opacity-90 font-medium">
+                                        Once your formal refund payload is validated, financial procession will be automatically initiated to your exact original operational payment credential.
+                                    </p>
+                                    <ul className="list-none space-y-2 opacity-90 text-sm">
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> Refunds typically dictate 3-5 routine business days</li>
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> Minor delays may structurally occur due to gateway caching</li>
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> Standard bank operational speeds govern final clearing</li>
+                                    </ul>
+                                </div>
+                                <div className="w-full md:w-32 aspect-square border border-primary-foreground/20 rounded-3xl flex items-center justify-center relative overflow-hidden group bg-black/10 shrink-0">
+                                    <CheckCircle size={40} className="text-emerald-300 group-hover:scale-110 transition-transform duration-500" />
                                 </div>
                             </div>
+                        </section>
 
-                            <div className="border rounded-lg p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
-                                <div className="flex items-start gap-3">
-                                    <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                                    <div>
-                                        <p className="font-semibold text-red-900 dark:text-red-100">Less than 12 hours before booking</p>
-                                        <ul className="text-sm text-red-800 dark:text-red-200 mt-1 space-y-1">
-                                            <li>❌ No refund</li>
-                                            <li>⚠️ 100% cancellation fee</li>
-                                            <li>ℹ️ Booking amount forfeited</li>
-                                        </ul>
-                                    </div>
+                        {/* Requesting Refund */}
+                        <section className="space-y-6">
+                            <div className="flex items-center gap-3 border-b border-border pb-4">
+                                <Search className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">How to Request</h2>
+                            </div>
+                            <p>To safely request standard eligible refunds:</p>
+                            <ul className="grid sm:grid-cols-2 gap-4 list-none pl-0">
+                                {[
+                                    "Log into your PrimeOne User Account portal",
+                                    "Navigate swiftly to the 'My Bookings' Dashboard interface",
+                                    "Select standard 'Cancel Booking' directly on your active reservation",
+                                    "Our system architecture automatically calculates eligible returns"
+                                ].map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3 p-4 bg-muted/50 rounded-xl border border-border">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5" />
+                                        <span className="text-sm font-medium leading-relaxed">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <p className="text-sm opacity-60 italic mt-4">Alternatively, you may formally contact functional support via sanctioned channels.</p>
+                        </section>
+
+                        {/* Contact */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4 font-mono text-sm tracking-[0.3em]">Contact Billing</h2>
+                            <p>For explicit billing inquiries or strictly refund operational disputes:</p>
+                            <div className="bg-background p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between group cursor-pointer border border-border shadow-md gap-6">
+                                <div>
+                                    <p className="text-[10px] font-mono uppercase tracking-[0.5em] opacity-50 mb-2">PrimeOne Billing Support</p>
+                                    <a href="mailto:support@primeone.space" className="text-xl md:text-2xl font-bold tracking-tighter text-foreground hover:underline">
+                                        support@primeone.space
+                                    </a>
+                                </div>
+                                <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shrink-0">
+                                    <Mail size={20} />
                                 </div>
                             </div>
-                        </div>
-
-                        <h3>1.2 Daily Bookings</h3>
-                        <ul>
-                            <li><strong>More than 48 hours before</strong>: Full refund (100%)</li>
-                            <li><strong>24-48 hours before</strong>: 50% refund</li>
-                            <li><strong>Less than 24 hours before</strong>: No refund</li>
-                        </ul>
-
-                        <h3>1.3 Monthly Memberships</h3>
-                        <ul>
-                            <li><strong>Before membership start</strong>: Full refund (100%)</li>
-                            <li><strong>Within first 7 days</strong>: Pro-rated refund (minus one week's fee)</li>
-                            <li><strong>After 7 days</strong>: No refund for current month, can cancel for next month (30 days notice required)</li>
-                        </ul>
-
-                        <h3>1.4 Event Registrations</h3>
-                        <ul>
-                            <li><strong>More than 7 days before event</strong>: Full refund (100%)</li>
-                            <li><strong>3-7 days before event</strong>: 50% refund</li>
-                            <li><strong>Less than 3 days before event</strong>: No refund</li>
-                        </ul>
-
-                        <h2>2. How to Cancel</h2>
-
-                        <h3>2.1 Online Cancellation</h3>
-                        <ol>
-                            <li>Log in to your account</li>
-                            <li>Go to "My Bookings"</li>
-                            <li>Select the booking to cancel</li>
-                            <li>Click "Cancel Booking"</li>
-                            <li>Confirm cancellation</li>
-                            <li>Receive confirmation email</li>
-                        </ol>
-
-                        <h3>2.2 Email Cancellation</h3>
-                        <ul>
-                            <li>Send email to: <a href="mailto:bookings@primeone.space" className="text-primary hover:underline">bookings@primeone.space</a></li>
-                            <li>Include: Booking ID, Name, Email, Reason</li>
-                            <li>Response within 24 hours</li>
-                        </ul>
-
-                        <h3>2.3 Phone Cancellation</h3>
-                        <ul>
-                            <li>Call: +94 70 623 3612</li>
-                            <li>Available: Monday-Friday, 9 AM - 6 PM (Sri Lanka Time)</li>
-                            <li>Provide booking details</li>
-                        </ul>
-
-                        <h2 className="flex items-center gap-2">
-                            <DollarSign className="w-5 h-5" />
-                            3. Refund Processing
-                        </h2>
-
-                        <h3>3.1 Refund Timeline</h3>
-                        <ul>
-                            <li><strong>Credit/Debit Card</strong>: 5-7 business days</li>
-                            <li><strong>Bank Transfer</strong>: 7-10 business days</li>
-                            <li><strong>Digital Wallets</strong>: 3-5 business days</li>
-                        </ul>
-
-                        <h3>3.2 Refund Method</h3>
-                        <ul>
-                            <li>Refunds issued to original payment method</li>
-                            <li>Cannot refund to different account</li>
-                            <li>Processing fees may apply (bank-dependent)</li>
-                        </ul>
-
-                        <h2>4. Modifications and Rescheduling</h2>
-
-                        <h3>4.1 Modification Policy</h3>
-                        <ul>
-                            <li><strong>More than 24 hours before</strong>: Free modification (one time), subject to availability</li>
-                            <li><strong>Less than 24 hours before</strong>: 25% modification fee, subject to availability</li>
-                        </ul>
-
-                        <h2>5. Exceptions and Special Circumstances</h2>
-
-                        <h3>5.1 Force Majeure</h3>
-                        <p>Full refund provided for cancellations due to:</p>
-                        <ul>
-                            <li>Natural disasters</li>
-                            <li>Government restrictions</li>
-                            <li>Public health emergencies</li>
-                            <li>Facility closures</li>
-                        </ul>
-
-                        <h3>5.2 Facility Issues</h3>
-                        <p>Full refund if we cancel due to:</p>
-                        <ul>
-                            <li>Maintenance issues</li>
-                            <li>Overbooking</li>
-                            <li>Facility unavailability</li>
-                            <li>Safety concerns</li>
-                        </ul>
-
-                        <h3>5.3 Medical Emergencies</h3>
-                        <ul>
-                            <li>Provide medical certificate</li>
-                            <li>Full refund considered on case-by-case basis</li>
-                            <li>Contact us within 48 hours</li>
-                        </ul>
-
-                        <h2>6. Non-Refundable Items</h2>
-                        <p>The following are <strong>NOT refundable</strong>:</p>
-                        <ul>
-                            <li>❌ Booking fees and service charges</li>
-                            <li>❌ Add-on services already consumed</li>
-                            <li>❌ Promotional discounts (if booking cancelled)</li>
-                            <li>❌ No-show bookings</li>
-                            <li>❌ Late cancellations (as per policy)</li>
-                        </ul>
-
-                        <h2>7. Contact Information</h2>
-                        <div className="bg-accent/50 p-4 rounded-lg not-prose">
-                            <p className="font-semibold mb-2">For Cancellations and Refunds:</p>
-                            <p className="text-sm">
-                                <strong>Email:</strong>{" "}
-                                <a href="mailto:bookings@primeone.space" className="text-primary hover:underline">
-                                    bookings@primeone.space
-                                </a>
-                            </p>
-                            <p className="text-sm">
-                                <strong>Phone:</strong> +94 70 623 3612
-                            </p>
-                            <p className="text-sm">
-                                <strong>Hours:</strong> Monday-Friday, 9 AM - 6 PM (Sri Lanka Time)
-                            </p>
-                            <p className="text-sm">
-                                <strong>Address:</strong> 146B, Goodshed Road, Thonikkal, Vavuniya, Sri Lanka
-                            </p>
-                        </div>
-
-                        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded mt-8 not-prose">
-                            <p className="text-sm font-medium">
-                                By making a booking, you acknowledge that you have read, understood, and agree to this Refund and Cancellation Policy.
-                            </p>
-                            <p className="text-sm mt-2">
-                                Questions? Contact us at{" "}
-                                <a href="mailto:bookings@primeone.space" className="text-primary hover:underline">
-                                    bookings@primeone.space
-                                </a>{" "}
-                                or call +94 70 623 3612
-                            </p>
-                        </div>
-
-                        <div className="flex gap-4 mt-8 not-prose">
-                            <Link href="/terms">
-                                <button className="text-sm text-primary hover:underline">Terms of Service</button>
-                            </Link>
-                            <Link href="/privacy">
-                                <button className="text-sm text-primary hover:underline">Privacy Policy</button>
-                            </Link>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                            <div className="mt-8 flex flex-wrap gap-4 pt-8">
+                                <Link href="/privacy" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Privacy Policy</Link>
+                                <span className="opacity-30">|</span>
+                                <Link href="/terms" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Terms of Service</Link>
+                            </div>
+                        </section>
+                    </motion.div>
+                </div>
+            </main>
         </div>
     );
 }

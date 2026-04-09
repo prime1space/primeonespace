@@ -26,8 +26,20 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { baseURL } = await import("@/lib/auth-client");
+      const res = await fetch(`${baseURL}/contact-form`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
+
       toast.success("Message sent successfully! We'll get back to you soon.");
       setFormData({
         name: "",
@@ -36,8 +48,12 @@ export default function ContactPage() {
         subject: "",
         message: "",
       });
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while sending your message. Please try again.");
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const containerVariants = {
@@ -229,8 +245,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-sm uppercase tracking-wide text-muted-foreground mb-1">Phone Number</h4>
-                    <a href="tel:+94706233612" className="font-medium text-foreground hover:text-primary transition-colors block text-lg whitespace-nowrap">
-                      +94 70 623 3612
+                    <a href="tel:+94772228507" className="font-medium text-foreground hover:text-primary transition-colors block text-lg whitespace-nowrap">
+                      +94 77 222 8507
                     </a>
                     <span className="text-xs text-muted-foreground">Mon-Fri 9am-6pm</span>
                   </div>
@@ -275,10 +291,10 @@ export default function ContactPage() {
           className="mt-16 rounded-3xl overflow-hidden shadow-2xl h-[400px] border-4 border-white dark:border-zinc-800"
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15783.565809798083!2d80.49390235!3d8.75421235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afc1507d3330d4b%3A0x62391054236a28!2sVavuniya!5e0!3m2!1sen!2slk!4v1714567890123!5m2!1sen!2slk"
+            src="https://maps.google.com/maps?q=146B,%20Goodshed%20Road,%20Vavuniya,%20Sri%20Lanka&t=&z=16&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="100%"
-            style={{ border: 0, filter: "grayscale(1) contrast(1.2) opacity(0.8)" }}
+            style={{ border: 0, filter: "contrast(1.2) opacity(0.9)" }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

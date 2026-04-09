@@ -12,6 +12,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Force scroll to top on mount
+    if (typeof window !== 'undefined') {
+      window.history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    }
+
     const fetchData = async () => {
       // Use centralized baseURL (likely .../api/router.php in production)
       const API_URL = baseURL;

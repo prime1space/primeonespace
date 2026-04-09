@@ -22,7 +22,7 @@ export function SettingsManager() {
 
     const fetchSettings = async () => {
         try {
-            const res = await fetch(`${baseURL}/api/settings`, {
+            const res = await fetch(`${baseURL}/settings`, {
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("bearer_token")}`
                 }
@@ -40,7 +40,7 @@ export function SettingsManager() {
         e.preventDefault();
         setSaving(true);
         try {
-            const res = await fetch(`${baseURL}/api/settings`, {
+            const res = await fetch(`${baseURL}/settings`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

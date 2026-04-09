@@ -15,6 +15,9 @@ interface Pricing {
     id: number;
     spaceType: string;
     hourlyRate: number | null;
+    rate2h: number | null;
+    rate3h: number | null;
+    rate4hPlus: number | null;
     dailyRate: number | null;
     monthlyRate: number | null;
 }
@@ -80,17 +83,53 @@ export function PricingManager() {
                         <CardDescription>Edit rates for this space type</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>Hourly Rate (LKR)</Label>
-                            <Input
-                                type="number"
-                                value={item.hourlyRate || ""}
-                                onChange={(e) => {
-                                    const val = e.target.value ? parseFloat(e.target.value) : null;
-                                    setPricing(pricing.map(p => p.id === item.id ? { ...p, hourlyRate: val } : p));
-                                }}
-                            />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Hourly Rate (LKR)</Label>
+                                <Input
+                                    type="number"
+                                    value={item.hourlyRate || ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value ? parseFloat(e.target.value) : null;
+                                        setPricing(pricing.map(p => p.id === item.id ? { ...p, hourlyRate: val } : p));
+                                    }}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>2 Hour Rate (LKR)</Label>
+                                <Input
+                                    type="number"
+                                    value={item.rate2h || ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value ? parseFloat(e.target.value) : null;
+                                        setPricing(pricing.map(p => p.id === item.id ? { ...p, rate2h: val } : p));
+                                    }}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>3 Hour Rate (LKR)</Label>
+                                <Input
+                                    type="number"
+                                    value={item.rate3h || ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value ? parseFloat(e.target.value) : null;
+                                        setPricing(pricing.map(p => p.id === item.id ? { ...p, rate3h: val } : p));
+                                    }}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>4h+ Rate (LKR)</Label>
+                                <Input
+                                    type="number"
+                                    value={item.rate4hPlus || ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value ? parseFloat(e.target.value) : null;
+                                        setPricing(pricing.map(p => p.id === item.id ? { ...p, rate4hPlus: val } : p));
+                                    }}
+                                />
+                            </div>
                         </div>
+
                         <div className="space-y-2">
                             <Label>Daily Rate (LKR)</Label>
                             <Input

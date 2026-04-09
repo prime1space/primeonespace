@@ -161,7 +161,7 @@ export default function CancellationPage() {
             <p>
               For cancellation requests and inquiries:<br />
               Email: <a href="mailto:hello@primeone.space" className="text-zinc-900 font-medium no-underline hover:underline">hello@primeone.space</a><br />
-              Phone: 070 623 3612<br />
+              Phone: 077 222 8507<br />
               In-person: Reception desk during business hours
             </p>
           </CardContent>

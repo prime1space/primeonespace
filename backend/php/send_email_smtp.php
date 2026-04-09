@@ -122,4 +122,29 @@ function sendBookingConfirmationEmail($to, $bookingDetails) {
 
     return sendEmailSMTP($to, $subject, $htmlContent);
 }
+
+// Wrapper for Event Reservation Confirmation
+function sendEventReservationEmail($to, $userName, $eventDetails) {
+    $subject = "Event Reservation Confirmed: " . $eventDetails['title'];
+    
+    $htmlContent = "
+    <html>
+    <body style='font-family: Arial, sans-serif; color: #333;'>
+        <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee;'>
+            <h2 style='color: #ff4917;'>Spot Reserved!</h2>
+            <p>Hello {$userName},</p>
+            <p>You have successfully reserved your spot for the following event:</p>
+            <div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;'>
+                <p><strong>Event:</strong> {$eventDetails['title']}</p>
+                <p><strong>Date & Time:</strong> {$eventDetails['eventDate']}</p>
+                <p><strong>Location:</strong> PrimeOne Coworking Space, Vavuniya</p>
+            </div>
+            <p>We look forward to seeing you there!</p>
+            <p>Best regards,<br>The PrimeOne Team</p>
+        </div>
+    </body>
+    </html>";
+
+    return sendEmailSMTP($to, $subject, $htmlContent);
+}
 ?>

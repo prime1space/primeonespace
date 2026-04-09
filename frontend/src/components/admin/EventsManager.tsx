@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Calendar, Image as ImageIcon, Edit } from "lucide-react";
+import { fixImageUrl } from "@/lib/utils";
 
 import { baseURL } from "@/lib/auth-client";
 
@@ -117,14 +118,8 @@ export function EventsManager() {
 
             const data = await res.json();
 
-
             // Construct full URL if it's relative
-            let imageUrl = data.url;
-            if (imageUrl && imageUrl.startsWith('/')) {
-                // Remove trailing slash from baseURL if present
-                const cleanBaseURL = baseURL.replace(/\/$/, '');
-                imageUrl = `${cleanBaseURL}${imageUrl}`;
-            }
+            const imageUrl = fixImageUrl(data.url);
 
             setFormData(prev => ({ ...prev, imageUrl: imageUrl }));
             toast.success("Image uploaded successfully");
@@ -234,7 +229,7 @@ export function EventsManager() {
                             <div className="flex gap-4 items-start">
                                 {formData.imageUrl && (
                                     <div className="relative w-20 h-20 rounded-md overflow-hidden border">
-                                        <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                                        <img src={fixImageUrl(formData.imageUrl)} alt="Preview" className="w-full h-full object-cover" />
                                     </div>
                                 )}
                                 <div className="flex-1">
@@ -322,7 +317,7 @@ export function EventsManager() {
                         <CardContent>
                             <div className="flex gap-4 mb-6">
                                 {event.imageUrl && (
-                                    <img src={event.imageUrl} alt={event.title} className="w-20 h-20 object-cover rounded-md" />
+                                    <img src={fixImageUrl(event.imageUrl)} alt={event.title} className="w-20 h-20 object-cover rounded-md" />
                                 )}
                                 <div className="flex-1 space-y-2">
                                     <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>

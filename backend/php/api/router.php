@@ -1,25 +1,29 @@
 <?php
 // router.php for PHP built-in server
 
-// Global CORS Configuration
+// Global CORS Configuration — strict allowlist
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-// Allow localhost and production
-if (preg_match('/^http:\/\/localhost(:\d+)?$/', $origin) || 
-    preg_match('/^http:\/\/127\.0\.0\.1(:\d+)?$/', $origin) || 
-    $origin === 'https://primeone.space' || 
-    $origin === 'https://www.primeone.space') {
+
+$allowedOrigins = [
+    // Production domains
+    'https://primeone.space',
+    'https://www.primeone.space',
+    'https://house.primeone.lk',
+    // Local development
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+];
+
+if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
-} else {
-    // If we want credentials, we can't use *
-    // If no origin match, don't set header or set specific default?
-    // Setting * is invalid with credentials.
-    // If testing with tools (no origin), * might be okay if credentials false.
-    // But we set credentials true below.
-    if (!empty($origin)) {
-        header("Access-Control-Allow-Origin: $origin");
-    }
+    header("Access-Control-Allow-Credentials: true");
+} elseif (preg_match('/^http:\/\/127\.0\.0\.1(:\d+)?$/', $origin) || preg_match('/^http:\/\/localhost(:\d+)?$/', $origin)) {
+    // Allow any localhost port for dev convenience
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
 }
-header("Access-Control-Allow-Credentials: true");
+// Unknown origins: no CORS headers set — request will be blocked by browser
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, set-auth-token");
 header("Access-Control-Expose-Headers: set-auth-token");
@@ -36,6 +40,28 @@ require_once __DIR__ . '/../db.php';
 
 $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
+// 1. Static Files Check
+$file = __DIR__ . $uri;
+if (file_exists($file) && !is_dir($file)) {
+    // Determine content type
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
+    $mimes = [
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'gif' => 'image/gif',
+        'webp' => 'image/webp',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json'
+    ];
+    $contentType = isset($mimes[$ext]) ? $mimes[$ext] : 'application/octet-stream';
+    
+    header("Content-Type: $contentType");
+    readfile($file);
+    return;
+}
+
 // Normalize URI
 // Remove script name if present (e.g. /router.php/foo -> /foo)
 if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0) {
@@ -44,13 +70,6 @@ if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0) {
 // Remove trailing slash unless root
 if ($uri !== '/' && substr($uri, -1) === '/') {
     $uri = substr($uri, 0, -1);
-}
-
-// 1. Static Files Check
-$file = __DIR__ . $uri;
-if (file_exists($file) && !is_dir($file)) {
-    // Let PHP serve it natively by returning false
-    return false;
 }
 
 // 2. Routing Map (exact matches)
@@ -75,6 +94,7 @@ $routes = [
     '/debug-db' => 'debug_db.php',
     '/create-payment-intent.php' => 'create-payment-intent.php',
     '/stripe-webhook.php' => 'stripe-webhook.php',
+    '/contact-form' => 'contact.php',
 ];
 
 if (isset($routes[$uri])) {
@@ -96,10 +116,6 @@ if (strpos($uri, '/auth/') === 0) {
 // If the file existed it was caught by step 1.
 
 // 5. Default 404
-// 5. Default 404
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '*';
-header("Access-Control-Allow-Origin: $origin");
-header("Access-Control-Allow-Credentials: true");
 http_response_code(404);
 echo json_encode(['error' => 'Not Found', 'uri' => $uri]);
 

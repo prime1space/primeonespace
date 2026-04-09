@@ -1,6 +1,6 @@
 "use client"
 import { createAuthClient } from "better-auth/react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 const getBaseURL = () => {
    const envURL = process.env.NEXT_PUBLIC_API_URL;
@@ -8,7 +8,8 @@ const getBaseURL = () => {
 
    if (typeof window !== 'undefined') {
       if (window.location.hostname.includes('primeone.space') || window.location.hostname.includes('primeone.global')) {
-         return `${window.location.origin}/api/router.php`;
+         // On cPanel: use router.php directly (htaccess rewrites don't work with static frontend)
+         return `${window.location.origin}/php/api/router.php`;
       }
       return window.location.origin;
    }
@@ -42,6 +43,11 @@ export function useSession(): SessionData {
    const [session, setSession] = useState<any>(null);
    const [isPending, setIsPending] = useState(true);
    const [error, setError] = useState<any>(null);
+   const sessionRef = useRef(session);
+
+   useEffect(() => {
+      sessionRef.current = session;
+   }, [session]);
 
    const refetch = () => {
       setIsPending(true);
@@ -111,7 +117,7 @@ export function useSession(): SessionData {
       // Polling for token presence (helpful for redirects where storage event might not fire)
       const interval = setInterval(() => {
          const token = localStorage.getItem("bearer_token");
-         if (token && !session) {
+         if (token && !sessionRef.current) {
             fetchSession();
          }
       }, 500);

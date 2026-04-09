@@ -14,7 +14,7 @@ if (!isset($conn)) {
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../RateLimiter.php';
 require_once __DIR__ . '/../CSRFProtection.php';
-require_once __DIR__ . '/../send_email_smtp.php';
+require_once __DIR__ . '/../send_email.php';
 
 // Initialize security components
 $rateLimiter = new RateLimiter($conn);
@@ -28,15 +28,23 @@ try {
     // .env might be missing in some environments, handle gracefully
 }
 
-// Debug logging
+// Debug logging — only active when DEBUG_MODE=true in .env
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
 $log_file = __DIR__ . '/auth_debug.log';
+$debugEnabled = isset($_ENV['DEBUG_MODE']) && $_ENV['DEBUG_MODE'] === 'true';
+
+function debugLog($message) {
+    global $log_file, $debugEnabled;
+    if ($debugEnabled) {
+        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . $message . "\n", FILE_APPEND);
+    }
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Method=$method, Path=$path\n", FILE_APPEND);
+debugLog("Method=$method, Path=$path");
 
 // Helper to generate IDs like Better-Auth (simple random string)
 function generateId() {
@@ -52,7 +60,7 @@ if (preg_match('/auth\/(.+)$/', $path, $matches)) {
 // Remove .php if present in action
 $action = str_replace('.php/', '', $action);
 $action = str_replace('.php', '', $action);
-file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Action=$action\n", FILE_APPEND);
+debugLog("Action=$action");
 
 switch ($action) {
     case 'sign-up/email':
@@ -107,13 +115,13 @@ switch ($action) {
             // Insert user with email_verified = true for immediate access
             $stmt = $conn->prepare("INSERT INTO user (id, name, email, phone, nic_passport, address, country, date_of_birth, gender, emergency_contact_name, emergency_contact_phone, email_verified, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW(), NOW())");
             $userResult = $stmt->execute([$userId, $name, $email, $phone, $nicPassport, $address, $country, $dateOfBirth, $gender, $emergencyContactName, $emergencyContactPhone]);
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "User insert result: " . ($userResult ? 'SUCCESS' : 'FAILED') . "\n", FILE_APPEND);
+            debugLog("User insert result: " . ($userResult ? 'SUCCESS' : 'FAILED'));
 
             // Insert account
             $accountId = generateId();
             $stmt = $conn->prepare("INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
             $accountResult = $stmt->execute([$accountId, $userId, 'email', $userId, $password]);
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Account insert result: " . ($accountResult ? 'SUCCESS' : 'FAILED') . "\n", FILE_APPEND);
+            debugLog("Account insert result: " . ($accountResult ? 'SUCCESS' : 'FAILED'));
 
             // Auto-login after registration
             $token = bin2hex(random_bytes(32));
@@ -121,18 +129,18 @@ switch ($action) {
             $expiresAt = date('Y-m-d H:i:s', strtotime('+7 days'));
             $stmt = $conn->prepare("INSERT INTO session (id, token, user_id, expires_at, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())");
             $sessionResult = $stmt->execute([$sessionId, $token, $userId, $expiresAt]);
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Session insert result: " . ($sessionResult ? 'SUCCESS' : 'FAILED') . " Token: $token\n", FILE_APPEND);
+            debugLog("Session insert result: " . ($sessionResult ? 'SUCCESS' : 'FAILED'));
 
             $conn->commit();
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Registration SUCCESS for $email with token $token\n", FILE_APPEND);
+            debugLog("Registration SUCCESS for $email");
 
             // Send Welcome Email
             try {
                 // Use Brevo function
                 sendWelcomeEmail($email, $name);
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Welcome Email Sent (Brevo) to $email\n", FILE_APPEND);
+                debugLog("Welcome Email Sent (Brevo) to $email");
             } catch (Exception $e) {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Welcome Email Failed: " . $e->getMessage() . "\n", FILE_APPEND);
+                debugLog("Welcome Email Failed: " . $e->getMessage());
             }
 
             header("set-auth-token: " . $token);
@@ -143,23 +151,23 @@ switch ($action) {
             ]);
         } catch (PDOException $e) {
             if ($conn->inTransaction()) $conn->rollBack();
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth Error (sign-up): " . $e->getMessage() . "\n", FILE_APPEND);
+            debugLog("Auth Error (sign-up): " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["error" => ["message" => "Registration failed: " . $e->getMessage(), "code" => "DATABASE_ERROR"]]);
         }
         break;
 
     case 'sign-in/email':
-        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Processing sign-in/email\n", FILE_APPEND);
+        debugLog("Processing sign-in/email");
         if ($method !== 'POST') {
-             file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Method not POST\n", FILE_APPEND);
+             debugLog("Method not POST");
              break;
         }
         
         // Rate limiting: 5 attempts per minute, 15 minute lockout
         $rateCheck = $rateLimiter->checkLimit('login', 5, 60, 900);
         if (!$rateCheck['allowed']) {
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Rate limit exceeded\n", FILE_APPEND);
+            debugLog("Rate limit exceeded");
             http_response_code(429);
             echo json_encode([
                 "error" => [
@@ -172,11 +180,11 @@ switch ($action) {
         }
         
         $rawInput = file_get_contents("php://input");
-        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Raw input: " . substr($rawInput, 0, 100) . "\n", FILE_APPEND);
+        debugLog("Raw input received (length=" . strlen($rawInput) . ")");
         
         $data = json_decode($rawInput, true);
         if (!$data) {
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "JSON decode failed: " . json_last_error_msg() . "\n", FILE_APPEND);
+            debugLog("JSON decode failed: " . json_last_error_msg());
             http_response_code(400);
             echo json_encode(["error" => ["message" => "No data received", "code" => "BAD_REQUEST"]]);
             exit();
@@ -185,7 +193,7 @@ switch ($action) {
         $email = strtolower(trim($data['email']));
         $password = $data['password'];
         
-        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Attempting login for: $email\n", FILE_APPEND);
+        debugLog("Attempting login for: $email");
 
         try {
             if (!$conn) {
@@ -196,17 +204,17 @@ switch ($action) {
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth: Found user=" . ($user ? $user['email'] : 'NONE') . "\n", FILE_APPEND);
+            debugLog("Auth: Found user=" . ($user ? $user['email'] : 'NONE'));
 
             if (!$user) {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth Error: User not found or incorrect provider for $email\n", FILE_APPEND);
+                debugLog("Auth Error: User not found or incorrect provider for $email");
                 http_response_code(401);
                 echo json_encode(["error" => ["message" => "Account not found with this email", "code" => "INVALID_CREDENTIALS"]]);
                 exit();
             }
 
             if (password_verify($password, $user['password'])) {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth: Password verification SUCCESS for $email\n", FILE_APPEND);
+                debugLog("Auth: Password verification SUCCESS for $email");
                 
                 // Reset rate limiter on successful login
                 $rateLimiter->reset('login');
@@ -229,18 +237,131 @@ switch ($action) {
                     "user" => ["id" => $user['id'], "email" => $user['email'], "name" => $user['name']]
                 ]);
             } else {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth Error: Incorrect password for $email\n", FILE_APPEND);
+                debugLog("Auth Error: Incorrect password for $email");
                 http_response_code(401);
                 echo json_encode(["error" => ["message" => "Incorrect password. Please try again.", "code" => "INVALID_CREDENTIALS"]]);
             }
         } catch (PDOException $e) {
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Auth Error (sign-in): " . $e->getMessage() . "\n", FILE_APPEND);
+            debugLog("Auth Error (sign-in): " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["error" => ["message" => "Database error: " . $e->getMessage(), "code" => "DATABASE_ERROR"]]);
         } catch (Exception $e) {
-             file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "General Error: " . $e->getMessage() . "\n", FILE_APPEND);
+             debugLog("General Error: " . $e->getMessage());
              http_response_code(500);
              echo json_encode(["error" => ["message" => "Server error: " . $e->getMessage(), "code" => "SERVER_ERROR"]]);
+        }
+        break;
+
+    case 'google':
+        if ($method !== 'POST') break;
+        
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || !isset($data['token'])) {
+            http_response_code(400);
+            echo json_encode(["error" => ["message" => "No token received", "code" => "BAD_REQUEST"]]);
+            exit();
+        }
+
+        $idToken = $data['token'];
+
+        // Verify the token with Google
+        $ch = curl_init('https://oauth2.googleapis.com/tokeninfo?id_token=' . $idToken);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $payload = json_decode($response, true);
+
+        if ($httpCode !== 200 || isset($payload['error'])) {
+            debugLog("Google Auth Error: " . json_encode($payload));
+            http_response_code(401);
+            echo json_encode(["error" => ["message" => "Invalid Google token", "code" => "INVALID_TOKEN"]]);
+            exit();
+        }
+
+        // Check the client ID (aud)
+        $clientId = '33373845768-dhkfj9l6mr7oa5rfbkk73lf3so0ntj7q.apps.googleusercontent.com';
+        if ($payload['aud'] !== $clientId) {
+            http_response_code(401);
+            echo json_encode(["error" => ["message" => "Token was not issued for this app", "code" => "INVALID_AUDIENCE"]]);
+            exit();
+        }
+
+        $email = strtolower(trim($payload['email']));
+        $name = $payload['name'] ?? 'Google User';
+        $googleUserId = $payload['sub']; // Unique Google ID
+        
+        debugLog("Google Auth: Attempting login for $email");
+
+        try {
+            if (!$conn) throw new Exception("Database connection not established");
+            
+            $conn->beginTransaction();
+
+            // Check if user exists
+            $stmt = $conn->prepare("SELECT id, name, email FROM user WHERE LOWER(email) = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                // User doesn't exist, create a new one using minimal fields
+                $userId = generateId();
+                // Since other fields like country have no default, we should omit them or provide sensible defaults if strictly required. 
+                // Wait, examining earlier sign-up: "INSERT INTO user (id, name, email, phone, nic_passport, address, country, date_of_birth, gender, emergency_contact_name, emergency_contact_phone, email_verified, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW(), NOW())"
+                // Lets add default country Sri Lanka.
+                $stmt = $conn->prepare("INSERT INTO user (id, name, email, country, email_verified, created_at, updated_at) VALUES (?, ?, ?, 'Sri Lanka', 1, NOW(), NOW())");
+                $stmt->execute([$userId, $name, $email]);
+                
+                // Add account mapping
+                $accountId = generateId();
+                $stmt = $conn->prepare("INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at) VALUES (?, ?, 'google', ?, '', NOW(), NOW())");
+                $stmt->execute([$accountId, $googleUserId, $userId]);
+                
+                $user = ['id' => $userId, 'name' => $name, 'email' => $email];
+                debugLog("Google Auth: Created new user for $email");
+            } else {
+                // User exists, make sure they have a google account record linked or link it
+                $stmt = $conn->prepare("SELECT id FROM account WHERE user_id = ? AND provider_id = 'google'");
+                $stmt->execute([$user['id']]);
+                if (!$stmt->fetch()) {
+                    $accountId = generateId();
+                    $linkStmt = $conn->prepare("INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at) VALUES (?, ?, 'google', ?, '', NOW(), NOW())");
+                    $linkStmt->execute([$accountId, $googleUserId, $user['id']]);
+                }
+                debugLog("Google Auth: Logged in existing user $email");
+            }
+
+            // Create a session for them
+            $token = bin2hex(random_bytes(32));
+            $sessionId = generateId();
+            $expiresAt = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+            $stmt = $conn->prepare("INSERT INTO session (id, token, user_id, expires_at, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())");
+            $stmt->execute([$sessionId, $token, $user['id'], $expiresAt]);
+
+            $conn->commit();
+            
+            // Clear any previous output
+            if (ob_get_length()) ob_clean();
+            
+            header("set-auth-token: " . $token);
+            echo json_encode([
+                "status" => true,
+                "token" => $token,
+                "user" => ["id" => $user['id'], "email" => $user['email'], "name" => $user['name']]
+            ]);
+
+        } catch (PDOException $e) {
+            if ($conn->inTransaction()) $conn->rollBack();
+            debugLog("Google Auth Error DB: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(["error" => ["message" => "Database error.", "code" => "DATABASE_ERROR"]]);
+        } catch (Exception $e) {
+            if ($conn->inTransaction()) $conn->rollBack();
+            debugLog("Google Auth Error General: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(["error" => ["message" => "Server error.", "code" => "SERVER_ERROR"]]);
         }
         break;
 
@@ -258,19 +379,18 @@ switch ($action) {
             $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
         }
         
-        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: Headers " . print_r($headers, true) . "\n", FILE_APPEND);
-        file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: Auth Header: $authHeader\n", FILE_APPEND);
+        debugLog("get-session: Auth Header received");
         
         if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             $token = $matches[1];
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: Checking token $token\n", FILE_APPEND);
+            debugLog("get-session: Checking token");
             
             $stmt = $conn->prepare("SELECT s.user_id, s.expires_at, u.id, u.name, u.email, u.image, u.email_verified FROM session s JOIN user u ON s.user_id = u.id WHERE s.token = ?");
             $stmt->execute([$token]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($result && strtotime($result['expires_at']) > time()) {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: Valid session for " . $result['email'] . "\n", FILE_APPEND);
+                debugLog("get-session: Valid session for " . $result['email']);
                 echo json_encode([
                     "user" => [
                         "id" => $result['id'],
@@ -285,11 +405,11 @@ switch ($action) {
                     ]
                 ]);
             } else {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: Invalid or expired session\n", FILE_APPEND);
+                debugLog("get-session: Invalid or expired session");
                 echo json_encode(["user" => null, "session" => null]);
             }
         } else {
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "get-session: No Bearer token found\n", FILE_APPEND);
+            debugLog("get-session: No Bearer token found");
             echo json_encode(["user" => null, "session" => null]);
         }
         break;
@@ -361,13 +481,13 @@ switch ($action) {
         try {
             $result = sendPasswordResetEmail($to, $token, $user['name']);
             if ($result) {
-                file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Forgot Password: Email sent to $email\n", FILE_APPEND);
+                debugLog("Forgot Password: Email sent to $email");
                 echo json_encode(["status" => true, "message" => "If an account exists with this email, a reset link has been sent."]);
             } else {
                 throw new Exception("Brevo returned false");
             }
         } catch (Exception $e) {
-             file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Forgot Password: Email failed to $email. Error: " . $e->getMessage() . "\n", FILE_APPEND);
+             debugLog("Forgot Password: Email failed to $email. Error: " . $e->getMessage());
              http_response_code(500);
              echo json_encode(["error" => ["message" => "Failed to send email. Please try again later.", "code" => "EMAIL_ERROR"]]);
         }
@@ -422,7 +542,7 @@ switch ($action) {
             echo json_encode(["status" => true, "message" => "Password updated successfully."]);
         } catch (Exception $e) {
             $conn->rollBack();
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Reset Password Error: " . $e->getMessage() . "\n", FILE_APPEND);
+            debugLog("Reset Password Error: " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["error" => ["message" => "Failed to reset password: " . $e->getMessage(), "code" => "SERVER_ERROR"]]);
         }

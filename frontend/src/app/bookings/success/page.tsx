@@ -33,7 +33,7 @@ function SuccessContent() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <p className="text-muted-foreground">
-                        Thank you for your booking. Please proceed to the payment counter upon arrival.
+                        Payment received. Your booking is confirmed and a receipt has been sent to your email.
                     </p>
                     {orderId && (
                         <p className="font-mono text-sm bg-muted p-2 rounded">

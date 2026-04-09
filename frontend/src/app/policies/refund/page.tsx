@@ -250,7 +250,7 @@ export default function RefundPage() {
             <p>
               For refund requests and inquiries:<br />
               Email: <a href="mailto:hello@primeone.space" className="text-zinc-900 font-medium no-underline hover:underline">hello@primeone.space</a><br />
-              Phone: 070 623 3612<br />
+              Phone: 077 222 8507<br />
               Subject Line: "Refund Request - [Booking ID]"
             </p>
             <p>

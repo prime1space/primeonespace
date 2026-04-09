@@ -143,7 +143,7 @@ export default function PrivacyPage() {
             <p>
               For privacy-related questions or concerns:<br />
               Email: <a href="mailto:hello@primeone.space" className="text-zinc-900 font-medium no-underline hover:underline">hello@primeone.space</a><br />
-              Phone: 070 623 3612<br />
+              Phone: 077 222 8507<br />
               Address: 146B, Goodshed Road,<br />Thonikkal, Vavuniya, NP, Sri Lanka.
             </p>
           </CardContent>

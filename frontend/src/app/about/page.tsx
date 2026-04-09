@@ -69,7 +69,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden w-full max-w-[100vw]">
       {/* Hero Section */}
       <div className="relative py-24 lg:py-32 overflow-hidden bg-[#14212B] text-white">
         <div className="absolute inset-0 overflow-hidden">
@@ -155,24 +155,44 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          {/* Core Values */}
-          {/* Core Values */}
-          <div className="mb-24">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-black text-[#14212B] dark:text-white mb-4">Our Core Values</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">The non-negotiable principles that drive our every decision.</p>
+          {/* Core Values - Renovated */}
+          <div className="mb-32 relative isolate">
+            {/* Background Atmosphere */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+            <div className="text-center mb-20 relative z-10">
+              <Badge variant="outline" className="mb-6 rounded-full px-5 py-2 text-xs font-bold uppercase tracking-widest border-primary/30 text-primary bg-primary/5 backdrop-blur-sm">
+                Our Standards
+              </Badge>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#14212B] dark:text-white mb-6 tracking-tight">
+                Our Core Values.
+              </h2>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
+                The non-negotiable principles that drive our every decision.
+              </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
               {values.map((value, i) => (
-                <motion.div key={i} variants={itemVariants}>
-                  <div className="h-full group p-8 bg-background border border-primary rounded-2xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-primary/10 transition-transform duration-300 group-hover:scale-110`}>
-                      <value.icon className={`w-6 h-6 text-primary`} />
+                <motion.div key={i} variants={itemVariants} className="flex">
+                  <div className="relative overflow-hidden w-full group p-8 lg:p-12 bg-white dark:bg-[#1A2733] border border-border/50 dark:border-white/5 rounded-[2rem] hover:border-primary/40 transition-all duration-700 shadow-xl hover:shadow-2xl hover:shadow-primary/10 flex flex-col justify-between">
+                    {/* Number Watermark */}
+                    <div className="absolute -right-4 -bottom-10 text-[150px] font-black text-[#14212B]/5 dark:text-white/5 transition-transform duration-700 group-hover:scale-110 pointer-events-none select-none">
+                      0{i + 1}
                     </div>
-                    <h3 className="font-bold text-xl mb-3 text-foreground group-hover:text-primary transition-colors">{value.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {value.description}
-                    </p>
+
+                    {/* Top Decorative Gradient */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/50 transition-all duration-700" />
+
+                    <div className="relative z-10 flex flex-col items-start h-full">
+                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6 shadow-sm">
+                        <value.icon className="w-10 h-10 text-primary drop-shadow-sm" />
+                      </div>
+                      <h3 className="font-black text-2xl md:text-3xl mb-4 text-[#14212B] dark:text-white transition-colors duration-300 group-hover:text-primary">{value.title}</h3>
+                      <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-light">
+                        {value.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -181,26 +201,29 @@ export default function AboutPage() {
 
 
 
-          {/* Stats Section - Renovated */}
-          <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden bg-[#14212B] text-white relative py-16 px-6 md:px-12">
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
-            <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
-              {[
-                { value: 500, label: "Happy Members", icon: Users, suffix: "+" },
-                { value: 50, label: "Partner Companies", icon: Building2, suffix: "+" },
-                { value: 10000, label: "Hours of Focus", icon: Clock, suffix: "+" },
-                { value: 4.9, label: "Average Rating", icon: Star, suffix: "", decimals: 1 }
-              ].map((stat, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="flex justify-center mb-2 text-primary opacity-80">
-                    <stat.icon className="w-6 h-6" />
-                  </div>
-                  <div className="text-4xl md:text-5xl font-black tracking-tight flex justify-center items-center">
-                    <Counter value={stat.value} decimals={stat.decimals} />{stat.suffix}
-                  </div>
-                  <div className="text-sm uppercase tracking-widest text-zinc-400 font-medium">{stat.label}</div>
-                </div>
-              ))}
+          {/* Aspirational Image Block - Renovated */}
+          <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden relative min-h-[500px] w-full group shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200"
+              alt="Premium Workspace"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            {/* Subtle dark gradient for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-10">
+              <div className="max-w-3xl">
+                <Badge className="mb-4 bg-primary text-white border-0 px-4 py-1.5 text-sm uppercase tracking-wider font-semibold shadow-lg">
+                  <Gem className="w-3.5 h-3.5 mr-2" />
+                  Premium Experience
+                </Badge>
+                <h3 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+                  Where comfort meets uncompromised productivity.
+                </h3>
+                <p className="text-lg text-zinc-300 font-light max-w-xl">
+                  Every detail, from the ambient lighting to the ergonomic seating, is intentionally designed to support your best work. Step into an environment that respects your focus and elevates your standard.
+                </p>
+              </div>
             </div>
           </motion.div>
 
@@ -210,11 +233,11 @@ export default function AboutPage() {
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
               Don't take our word for it. Come visit us, grab a coffee, and feel the energy of our community.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" className="rounded-full px-8" asChild>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button size="lg" className="rounded-full px-8 w-full sm:w-auto" asChild>
                 <Link href="/contact">Book a Free Tour</Link>
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8" asChild>
+              <Button size="lg" variant="outline" className="rounded-full px-8 w-full sm:w-auto" asChild>
                 <Link href="/spaces">View Memberships</Link>
               </Button>
             </div>

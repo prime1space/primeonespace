@@ -112,7 +112,7 @@ export const ChatWidget = () => {
               <p className="text-xs opacity-90">Online • Always here to help</p>
             </div>
             <a
-              href="https://wa.me/94706233612"
+              href="https://wa.me/94772228507"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 hover:bg-primary-foreground/10 rounded-full transition-colors group"

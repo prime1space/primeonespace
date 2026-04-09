@@ -1,189 +1,177 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import Link from 'next/link';
+import { ArrowLeft, Scale, ShieldAlert, CreditCard, Mail, AlignLeft, AlertCircle, FileText } from 'lucide-react';
+import * as motion from "framer-motion/client";
 
 export default function TermsPage() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-            <div className="container max-w-4xl mx-auto px-4 py-12">
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-bold">Terms of Service</CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                            Last Updated: February 16, 2026 | Effective Date: February 16, 2026
-                        </p>
-                    </CardHeader>
-                    <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-                        <h2>1. Agreement to Terms</h2>
-                        <p>
-                            By accessing or using PrimeOne Coworking Space ("Service"), you agree to be bound by these Terms of Service ("Terms").
-                            If you disagree with any part of the terms, you may not access the Service.
-                        </p>
-
-                        <h2>2. Description of Service</h2>
-                        <p>PrimeOne provides coworking space booking and management services, including:</p>
-                        <ul>
-                            <li>Workspace booking (hot desks, private offices, meeting rooms)</li>
-                            <li>Event registration and management</li>
-                            <li>Member profile management</li>
-                            <li>Payment processing for bookings</li>
-                        </ul>
-
-                        <h2>3. User Accounts</h2>
-                        <h3>3.1 Registration</h3>
-                        <ul>
-                            <li>You must provide accurate, complete information when creating an account</li>
-                            <li>You must be at least 18 years old to use this Service</li>
-                            <li>You are responsible for maintaining the security of your account</li>
-                            <li>You are responsible for all activities under your account</li>
-                        </ul>
-
-                        <h3>3.2 Account Security</h3>
-                        <ul>
-                            <li>Keep your password confidential</li>
-                            <li>Notify us immediately of any unauthorized access</li>
-                            <li>We reserve the right to suspend accounts that violate these Terms</li>
-                        </ul>
-
-                        <h2>4. Bookings and Payments</h2>
-                        <h3>4.1 Booking Policy</h3>
-                        <ul>
-                            <li>All bookings are subject to availability</li>
-                            <li>Bookings must be made in advance</li>
-                            <li>We reserve the right to refuse any booking</li>
-                        </ul>
-
-                        <h3>4.2 Payment Terms</h3>
-                        <ul>
-                            <li>Payment is required at the time of booking</li>
-                            <li>All prices are in LKR (Sri Lankan Rupees)</li>
-                            <li>Prices are subject to change with notice</li>
-                        </ul>
-
-                        <h3>4.3 Cancellation Policy</h3>
-                        <ul>
-                            <li>Cancellations made 24 hours before booking: Full refund</li>
-                            <li>Cancellations made less than 24 hours: 50% refund</li>
-                            <li>No-shows: No refund</li>
-                            <li>We reserve the right to cancel bookings with full refund</li>
-                        </ul>
-                        <p>
-                            For complete details, see our{" "}
-                            <Link href="/refund-policy" className="text-primary hover:underline">
-                                Refund and Cancellation Policy
-                            </Link>
-                            .
-                        </p>
-
-                        <h2>5. User Conduct</h2>
-                        <p>You agree NOT to:</p>
-                        <ul>
-                            <li>Violate any laws or regulations</li>
-                            <li>Infringe on intellectual property rights</li>
-                            <li>Transmit harmful code or malware</li>
-                            <li>Harass, abuse, or harm others</li>
-                            <li>Use the Service for unauthorized commercial purposes</li>
-                            <li>Attempt to gain unauthorized access to systems</li>
-                            <li>Submit false or misleading information</li>
-                        </ul>
-
-                        <h2>6. Intellectual Property</h2>
-                        <h3>6.1 Our Content</h3>
-                        <ul>
-                            <li>All content, features, and functionality are owned by PrimeOne</li>
-                            <li>You may not copy, modify, or distribute our content without permission</li>
-                        </ul>
-
-                        <h3>6.2 User Content</h3>
-                        <ul>
-                            <li>You retain rights to content you submit</li>
-                            <li>You grant us a license to use your content for Service operation</li>
-                            <li>You represent that you have rights to submit the content</li>
-                        </ul>
-
-                        <h2>7. Privacy</h2>
-                        <p>
-                            Your use of the Service is also governed by our{" "}
-                            <Link href="/privacy" className="text-primary hover:underline">
-                                Privacy Policy
-                            </Link>
-                            . Please review our Privacy Policy to understand our practices.
-                        </p>
-
-                        <h2>8. Disclaimers</h2>
-                        <h3>8.1 Service Availability</h3>
-                        <ul>
-                            <li>The Service is provided "AS IS" and "AS AVAILABLE"</li>
-                            <li>We do not guarantee uninterrupted or error-free service</li>
-                            <li>We may modify or discontinue the Service at any time</li>
-                        </ul>
-
-                        <h3>8.2 Limitation of Liability</h3>
-                        <ul>
-                            <li>We are not liable for indirect, incidental, or consequential damages</li>
-                            <li>Our total liability is limited to the amount you paid in the last 12 months</li>
-                            <li>Some jurisdictions do not allow these limitations</li>
-                        </ul>
-
-                        <h2>9. Termination</h2>
-                        <h3>9.1 By You</h3>
-                        <ul>
-                            <li>You may terminate your account at any time</li>
-                            <li>Contact us to request account deletion</li>
-                        </ul>
-
-                        <h3>9.2 By Us</h3>
-                        <p>We may terminate or suspend your account if:</p>
-                        <ul>
-                            <li>You violate these Terms</li>
-                            <li>You engage in fraudulent activity</li>
-                            <li>Required by law</li>
-                            <li>At our sole discretion with or without notice</li>
-                        </ul>
-
-                        <h2>10. Contact Information</h2>
-                        <div className="bg-accent/50 p-4 rounded-lg not-prose">
-                            <p className="font-semibold mb-2">PrimeOne Coworking Space</p>
-                            <p className="text-sm">146B, Goodshed Road, Thonikkal</p>
-                            <p className="text-sm">Vavuniya, Sri Lanka</p>
-                            <p className="text-sm mt-2">
-                                <strong>Email:</strong> legal@primeone.space
-                            </p>
-                            <p className="text-sm">
-                                <strong>Phone:</strong> +94 70 623 3612
-                            </p>
-                            <p className="text-sm">
-                                <strong>Website:</strong>{" "}
-                                <a href="https://primeone.space" className="text-primary hover:underline">
-                                    https://primeone.space
-                                </a>
-                            </p>
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+            <main className="pt-32 pb-24 px-6 md:px-12">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="mb-16">
+                        <Link 
+                            href="/" 
+                            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity mb-8"
+                        >
+                            <ArrowLeft size={14} /> Back to Home
+                        </Link>
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-12 h-12 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center shadow-md">
+                                <Scale size={24} />
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-none">
+                                Terms of <br /> <span className="italic font-light opacity-50 text-emerald-600 dark:text-emerald-400">Service.</span>
+                            </h1>
                         </div>
+                        <p className="text-sm font-mono opacity-50 uppercase tracking-widest">Last updated: February 16, 2026</p>
+                    </div>
 
-                        <h2>11. Acknowledgment</h2>
-                        <p>
-                            By using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
-                        </p>
+                    {/* Content */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="max-w-none text-foreground/80 leading-relaxed space-y-16"
+                    >
+                        <section className="space-y-4">
+                            <p className="text-lg font-medium">By accessing or using PrimeOne Coworking Space ("Service"), you expressly agree to be bound by these Terms of Service ("Terms").</p>
+                            <p>If you disagree with any integral part of the terms, you may not access our services.</p>
+                        </section>
 
-                        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded mt-8">
-                            <p className="text-sm font-medium">
-                                For questions about these Terms, please contact us at{" "}
-                                <a href="mailto:legal@primeone.space" className="text-primary hover:underline">
-                                    legal@primeone.space
-                                </a>
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                        {/* Description */}
+                        <section className="space-y-8 bg-primary/5 p-8 lg:p-12 rounded-[2.5rem] border border-primary/10">
+                            <div className="flex items-center gap-3">
+                                <AlignLeft className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Description of Service</h2>
+                            </div>
+                            <p className="font-medium text-foreground py-2 border-l-2 border-primary/30 pl-4">PrimeOne provides coworking space booking and management services alongside supplementary offerings.</p>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                {[
+                                    "Workspace booking (desks, offices, meeting rooms)",
+                                    "Event registration and community management",
+                                    "Detailed member profile and booking history",
+                                    "Seamless payment processing for space rentals"
+                                ].map((item, idx) => (
+                                    <div key={idx} className="bg-background/80 p-4 rounded-xl border border-border flex items-start gap-3">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                                        <p className="text-sm font-medium">{item}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* User Accounts */}
+                        <section className="space-y-8">
+                            <div className="flex items-center gap-3 mb-6">
+                                <ShieldAlert className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">User Accounts & Conduct</h2>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    <div className="bg-muted/30 p-6 rounded-2xl border border-border shadow-sm">
+                                        <strong className="block text-foreground mb-4 font-mono text-xs uppercase tracking-wider text-emerald-600">Registration</strong>
+                                        <ul className="list-disc pl-5 space-y-2 text-sm opacity-90">
+                                            <li>Must provide accurate and complete info</li>
+                                            <li>Must be at least 18 years old</li>
+                                            <li>Assume responsibility for account security</li>
+                                        </ul>
+                                    </div>
+                                    <div className="bg-muted/30 p-6 rounded-2xl border border-border shadow-sm">
+                                        <strong className="block text-foreground mb-4 font-mono text-xs uppercase tracking-wider text-emerald-600">Community Guidelines</strong>
+                                        <ul className="list-disc pl-5 space-y-2 text-sm opacity-90">
+                                            <li>Do not violate laws or property rights</li>
+                                            <li>Do not harass, abuse, or threaten users</li>
+                                            <li>No unpermitted commercial pursuits</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Bookings */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4">Bookings & Payments</h2>
+                            <div className="flex flex-col md:flex-row gap-8 items-center bg-primary text-primary-foreground p-8 lg:p-12 rounded-[2.5rem]">
+                                <div className="flex-1 space-y-4">
+                                    <p className="leading-relaxed opacity-90 font-medium">
+                                        Full or designated partial payment is mandatorily required at the time of booking confirmation. All prices will default to LKR (Sri Lankan Rupees).
+                                    </p>
+                                    <ul className="list-none space-y-2 opacity-90 text-sm">
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> Bookings subject to real-time availability</li>
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> We reserve the right to limit bookings</li>
+                                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" /> Prices actively subject to scheduled change</li>
+                                    </ul>
+                                </div>
+                                <div className="w-full md:w-32 aspect-square border border-primary-foreground/20 rounded-3xl flex items-center justify-center relative overflow-hidden group bg-black/10 shrink-0">
+                                    <CreditCard size={40} className="text-emerald-300 group-hover:scale-110 transition-transform duration-500" />
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Intellectual Property */}
+                        <section className="space-y-8">
+                            <div className="flex items-center gap-3">
+                                <FileText className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Intellectual Property</h2>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mb-2">Our Content</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60 mb-4">PrimeOne Platform</p>
+                                    <p className="text-sm opacity-80">All embedded content and core features remain exclusively owned by PrimeOne. You may not duplicate or distribute without written permission.</p>
+                                </div>
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mb-2">User Submissions</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60 mb-4">Your Content</p>
+                                    <p className="text-sm opacity-80">You grant us a non-exclusive license to use submitted content exclusively for Service operation, while retaining baseline rights.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Liabilities & Termination */}
+                        <section className="space-y-8 bg-muted/20 p-8 rounded-[2.5rem] border border-border">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border/50 pb-4">Liabilities & Termination</h2>
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="font-bold text-foreground mb-2 flex items-center gap-2">
+                                        <AlertCircle className="w-4 h-4 text-emerald-600" /> Warranty Disclaimers
+                                    </h3>
+                                    <p className="text-sm opacity-80">The structural Service is delivered "AS IS". We technically do not guarantee uninterrupted or error-free service intervals. Our total liability is financially limited to the aggregate amount you legitimately paid our entity within the preceding 12 months.</p>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-foreground mb-2 flex items-center gap-2">
+                                        <AlertCircle className="w-4 h-4 text-emerald-600" /> Default Termination
+                                    </h3>
+                                    <p className="text-sm opacity-80">We may securely terminate or freeze your account ecosystem if you overtly violate these Terms or knowingly engage in demonstrable fraudulent systemic activity.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Contact */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4 font-mono text-sm tracking-[0.3em]">Contact Legal</h2>
+                            <p>For official legal correspondences and clarifications regarding our Terms:</p>
+                            <div className="bg-background p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between group cursor-pointer border border-border shadow-md gap-6">
+                                <div>
+                                    <p className="text-[10px] font-mono uppercase tracking-[0.5em] opacity-50 mb-2">PrimeOne Legal Desk</p>
+                                    <a href="mailto:legal@primeone.space" className="text-xl md:text-2xl font-bold tracking-tighter text-foreground hover:underline">
+                                        legal@primeone.space
+                                    </a>
+                                </div>
+                                <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shrink-0">
+                                    <Mail size={20} />
+                                </div>
+                            </div>
+                            <div className="mt-8 flex flex-wrap gap-4 pt-8">
+                                <Link href="/privacy" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Privacy Policy</Link>
+                                <span className="opacity-30">|</span>
+                                <Link href="/refund-policy" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Refund Policy</Link>
+                            </div>
+                        </section>
+                    </motion.div>
+                </div>
+            </main>
         </div>
     );
 }

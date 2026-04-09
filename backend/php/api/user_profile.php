@@ -30,21 +30,24 @@ if ($method == 'GET') {
     }
     
     try {
-        // Update user info
-        $stmt = $conn->prepare("UPDATE user SET name = ?, phone = ?, nic_passport = ?, address = ?, country = ?, date_of_birth = ?, gender = ?, emergency_contact_name = ?, emergency_contact_phone = ?, image = ? WHERE id = ?");
-        $stmt->execute([
-            $data['name'], 
-            $data['phone'] ?? null, 
-            $data['nic_passport'] ?? null, 
-            $data['address'] ?? null, 
-            $data['country'] ?? 'Sri Lanka',
-            $data['date_of_birth'] ?? null, 
-            $data['gender'] ?? null, 
-            $data['emergency_contact_name'] ?? null, 
-            $data['emergency_contact_phone'] ?? null, 
-            $data['image'] ?? null,
-            $userId
-        ]);
+        // Build the update query dynamically
+        $allowedFields = ['name', 'phone', 'nic_passport', 'address', 'country', 'date_of_birth', 'gender', 'emergency_contact_name', 'emergency_contact_phone', 'image'];
+        $updates = [];
+        $params = [];
+        
+        foreach ($allowedFields as $field) {
+            if (array_key_exists($field, $data)) {
+                $updates[] = "$field = ?";
+                $params[] = $data[$field];
+            }
+        }
+        
+        if (!empty($updates)) {
+            $params[] = $userId;
+            $setClause = implode(', ', $updates);
+            $stmt = $conn->prepare("UPDATE user SET $setClause WHERE id = ?");
+            $stmt->execute($params);
+        }
 
         // If password update requested
         if (isset($data['new_password']) && !empty($data['new_password'])) {
@@ -55,6 +58,7 @@ if ($method == 'GET') {
 
         echo json_encode(["status" => true, "message" => "Profile updated successfully"]);
     } catch (PDOException $e) {
+        file_put_contents(__DIR__ . "/error.log", $e->getMessage() . "\n", FILE_APPEND);
         http_response_code(500);
         echo json_encode(["error" => $e->getMessage()]);
     }

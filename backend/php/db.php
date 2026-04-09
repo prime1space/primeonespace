@@ -26,28 +26,29 @@ if (class_exists('Dotenv\Dotenv')) {
     }
 }
 
-// 3. Handle CORS
-$allowed_origins = [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://primeone.space',
-    'https://www.primeone.space'
-];
+// 3. Handle CORS — strict allowlist
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
-// Allow all localhost origins (any port) and production domains
-if (preg_match('/^http:\/\/localhost(:\d+)?$/', $origin) || 
-    preg_match('/^http:\/\/127\.0\.0\.1(:\d+)?$/', $origin) || 
-    in_array($origin, $allowed_origins)) {
+$allowedOrigins = [
+    // Production domains
+    'https://primeone.space',
+    'https://www.primeone.space',
+    'https://house.primeone.lk',
+    // Local development
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+];
+
+if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
-} else {
-    // Default to a specific origin if possible, otherwise * which breaks credentials
-    // For safety with credentials, we shouldn't return * if we want credentials.
-    // But if we don't match, the browser won't allow it anyway.
-    if (!empty($origin)) {
-        // Optional: Log rejected origin
-    }
+    header("Access-Control-Allow-Credentials: true");
+} elseif (preg_match('/^http:\/\/127\.0\.0\.1(:\d+)?$/', $origin) || preg_match('/^http:\/\/localhost(:\d+)?$/', $origin)) {
+    // Allow any localhost port for dev convenience
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
 }
+// Unknown origins: no CORS headers set — request will be blocked by browser
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Access-Control-Allow-Credentials: true");
@@ -60,7 +61,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS'
 
 // 4. Database Connection
 try {
-    $host = $_ENV['DB_HOST'] ?? 'localhost';
+    $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
     $db_name = $_ENV['DB_NAME'] ?? 'primeonespace_user_coworking';
     $username = $_ENV['DB_USER'] ?? 'primeonespace_api';
     $password = $_ENV['DB_PASS'] ?? ''; 
@@ -111,7 +112,8 @@ if (!function_exists('checkAdmin')) {
             $stmt = $conn->prepare("SELECT u.email FROM session s JOIN user u ON s.user_id = u.id WHERE s.token = ? AND s.expires_at > NOW()");
             $stmt->execute([$token]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($user && $user['email'] === 'prime1@gmail.com') return true;
+            $adminEmail = $_ENV['ADMIN_EMAIL'] ?? 'prime1@gmail.com';
+            if ($user && strtolower($user['email']) === strtolower($adminEmail)) return true;
         }
         return false;
     }

@@ -93,14 +93,14 @@ export const OmnichannelWidget = () => {
             name: 'WhatsApp',
             icon: <FaWhatsapp className="w-5 h-5" />,
             color: 'bg-[#25D366]',
-            href: 'https://wa.me/94777123456',
+            href: 'https://wa.me/94772228507',
         },
         {
             id: 'phone',
             name: 'Call Us',
             icon: <Phone className="w-5 h-5" />,
             color: 'bg-blue-500',
-            href: 'tel:+94777123456',
+            href: 'tel:+94772228507',
         },
         {
             id: 'ai-chat',

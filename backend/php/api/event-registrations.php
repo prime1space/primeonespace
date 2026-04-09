@@ -34,6 +34,22 @@ if ($method == 'POST') {
         $stmt = $conn->prepare("INSERT INTO event_registrations (event_id, user_id, created_at) VALUES (?, ?, ?)");
         $stmt->execute([$data['eventId'], $userId, date('Y-m-d H:i:s')]);
         
+        // Include email script
+        include_once __DIR__ . '/../send_email_smtp.php';
+
+        // Get user and event details for email
+        $userStmt = $conn->prepare("SELECT name, email FROM user WHERE id = ?");
+        $userStmt->execute([$userId]);
+        $user = $userStmt->fetch(PDO::FETCH_ASSOC);
+
+        $eventStmt = $conn->prepare("SELECT title, eventDate FROM events WHERE id = ?");
+        $eventStmt->execute([$data['eventId']]);
+        $eventDetails = $eventStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && $eventDetails) {
+            sendEventReservationEmail($user['email'], $user['name'], $eventDetails);
+        }
+
         echo json_encode(["success" => true]);
     } catch (PDOException $e) {
         http_response_code(500);

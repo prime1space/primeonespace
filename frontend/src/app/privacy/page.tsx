@@ -1,251 +1,187 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import { ArrowLeft, Shield, Lock, Eye, Globe, FileText } from "lucide-react";
+import Link from 'next/link';
+import { ShieldCheck, Lock, ArrowLeft, Mail, Fingerprint, Eye, Database, Globe } from 'lucide-react';
+import * as motion from "framer-motion/client";
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-            <div className="container max-w-4xl mx-auto px-4 py-12">
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
-
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-3 mb-2">
-                            <Shield className="w-8 h-8 text-primary" />
-                            <CardTitle className="text-3xl font-bold">Privacy Policy</CardTitle>
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+            <main className="pt-32 pb-24 px-6 md:px-12">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="mb-16">
+                        <Link 
+                            href="/" 
+                            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity mb-8"
+                        >
+                            <ArrowLeft size={14} /> Back to Home
+                        </Link>
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-12 h-12 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center shadow-md">
+                                <ShieldCheck size={24} />
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase leading-none">
+                                Privacy <br /> <span className="italic font-light opacity-50 text-emerald-600 dark:text-emerald-400">Policy.</span>
+                            </h1>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                            Last Updated: February 16, 2026 | Effective Date: February 16, 2026
-                        </p>
-                    </CardHeader>
-                    <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-                        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded mb-6 not-prose">
-                            <p className="text-sm font-medium">
-                                PrimeOne Coworking Space respects your privacy and is committed to protecting your personal data.
-                                This policy explains how we collect, use, and safeguard your information.
-                            </p>
-                        </div>
+                        <p className="text-sm font-mono opacity-50 uppercase tracking-widest">Last updated: February 16, 2026</p>
+                    </div>
 
-                        <h2 className="flex items-center gap-2">
-                            <FileText className="w-5 h-5" />
-                            1. Information We Collect
-                        </h2>
+                    {/* Content */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="max-w-none text-foreground/80 leading-relaxed space-y-16"
+                    >
+                        <section className="space-y-4">
+                            <p className="text-lg font-medium">PrimeOne Coworking Space respects your privacy and is committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information when you use our services.</p>
+                            <p>By using our Service, you consent to this Privacy Policy and our collection and use of information as described.</p>
+                        </section>
 
-                        <h3>1.1 Information You Provide</h3>
-                        <ul>
-                            <li><strong>Account Information</strong>: Name, email address, phone number, password</li>
-                            <li><strong>Profile Information</strong>: Country, address, date of birth, gender, emergency contact</li>
-                            <li><strong>Booking Information</strong>: Workspace preferences, dates, times, seat selections</li>
-                            <li><strong>Payment Information</strong>: Payment method details (processed securely)</li>
-                            <li><strong>Communications</strong>: Messages, support requests, feedback</li>
-                        </ul>
+                        {/* Collection */}
+                        <section className="space-y-8 bg-primary/5 p-8 lg:p-12 rounded-[2.5rem] border border-primary/10">
+                            <div className="flex items-center gap-3">
+                                <Eye className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Collecting Your Data</h2>
+                            </div>
 
-                        <h3>1.2 Automatically Collected Information</h3>
-                        <ul>
-                            <li><strong>Usage Data</strong>: Pages visited, features used, time spent</li>
-                            <li><strong>Device Information</strong>: IP address, browser type, operating system</li>
-                            <li><strong>Location Data</strong>: General location based on IP address</li>
-                            <li><strong>Cookies</strong>: Session cookies, preference cookies, analytics cookies</li>
-                        </ul>
+                            <div className="space-y-8">
+                                <div>
+                                    <h3 className="text-sm font-mono uppercase tracking-widest text-foreground font-bold mb-4">Information You Provide</h3>
+                                    <ul className="list-disc pl-5 space-y-2">
+                                        <li><strong>Account Info</strong>: Name, email address, phone number, password</li>
+                                        <li><strong>Profile Info</strong>: Country, address, gender, emergency contact</li>
+                                        <li><strong>Booking Info</strong>: Workspace preferences, dates, times, selections</li>
+                                        <li><strong>Payment Info</strong>: Secure payment method details</li>
+                                        <li><strong>Communications</strong>: Messages, support requests, feedback</li>
+                                    </ul>
+                                </div>
 
-                        <h2 className="flex items-center gap-2">
-                            <Eye className="w-5 h-5" />
-                            2. How We Use Your Information
-                        </h2>
+                                <div>
+                                    <h3 className="text-sm font-mono uppercase tracking-widest text-foreground font-bold mb-4">Automatically Collected</h3>
+                                    <ul className="list-disc pl-5 space-y-2">
+                                        <li><strong>Usage Data</strong>: Pages visited, features used, time spent</li>
+                                        <li><strong>Device Info</strong>: IP address, browser type, operating system</li>
+                                        <li><strong>Location Data</strong>: General location based on IP address</li>
+                                        <li><strong>Cookies</strong>: Session, preference, and analytics cookies</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
 
-                        <h3>2.1 To Provide Services</h3>
-                        <ul>
-                            <li>Create and manage your account</li>
-                            <li>Process bookings and payments</li>
-                            <li>Send booking confirmations and receipts</li>
-                            <li>Manage event registrations</li>
-                            <li>Provide customer support</li>
-                        </ul>
+                        {/* Usage */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4">Use of Your Personal Data</h2>
+                            <p>We use your data to maintain our Coworking Space effectively and securely:</p>
+                            <ul className="grid md:grid-cols-2 gap-4 list-none pl-0">
+                                {[
+                                    "Create and manage your account",
+                                    "Process bookings and payments",
+                                    "Send booking confirmations",
+                                    "Optimize user experience",
+                                    "Analyze overall usage patterns",
+                                    "Provide customer support",
+                                ].map((item, i) => (
+                                    <li key={i} className="flex items-center gap-3 p-4 bg-muted/50 rounded-xl border border-border">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                                        <span className="text-sm font-medium">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
 
-                        <h3>2.2 To Improve Services</h3>
-                        <ul>
-                            <li>Analyze usage patterns</li>
-                            <li>Develop new features</li>
-                            <li>Conduct research and analytics</li>
-                            <li>Optimize user experience</li>
-                        </ul>
+                        {/* Rights */}
+                        <section className="space-y-8">
+                            <div className="flex items-center gap-3 mb-6">
+                                <Fingerprint className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Your Rights</h2>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {[
+                                        { title: "Access & Portability", desc: "Request a copy of your data or download it in a machine-readable format." },
+                                        { title: "Correction & Deletion", desc: "Update incorrect information or request deletion of your account and data." },
+                                        { title: "Restriction", desc: "Restrict processing of your data or object to marketing purposes." },
+                                        { title: "Managing Cookies", desc: "You can adjust your browser settings to strictly block optional tracking cookies." }
+                                    ].map((item, idx) => (
+                                        <div key={idx} className="bg-muted/30 p-6 rounded-2xl border border-border shadow-sm">
+                                            <strong className="block text-foreground mb-2 font-mono text-xs uppercase tracking-wider">{item.title}</strong>
+                                            <p className="text-sm opacity-80">{item.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
 
-                        <h3>2.3 For Security</h3>
-                        <ul>
-                            <li>Prevent fraud and abuse</li>
-                            <li>Enforce our Terms of Service</li>
-                            <li>Comply with legal obligations</li>
-                            <li>Protect our rights and property</li>
-                        </ul>
+                        {/* Retention */}
+                        <section className="space-y-8">
+                            <div className="flex items-center gap-3">
+                                <Database className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground">Data Retention</h2>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-6">
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">Active</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60">General Accounts</p>
+                                    <p className="text-sm mt-3 opacity-80">Retained while your account is active</p>
+                                </div>
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">2 Years</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60">Inactive Accounts</p>
+                                    <p className="text-sm mt-3 opacity-80">Scheduled for deletion after 2 years</p>
+                                </div>
+                                <div className="p-6 bg-background rounded-2xl border border-border shadow-sm">
+                                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">7 Years</p>
+                                    <p className="text-[10px] font-mono uppercase tracking-wider opacity-60">Booking Records</p>
+                                    <p className="text-sm mt-3 opacity-80">Retained for tax and legal purposes</p>
+                                </div>
+                            </div>
+                        </section>
 
-                        <h2 className="flex items-center gap-2">
-                            <Lock className="w-5 h-5" />
-                            3. Data Security
-                        </h2>
+                        {/* Security */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4">Security of Your Data</h2>
+                            <div className="flex flex-col md:flex-row gap-8 items-center bg-primary text-primary-foreground p-8 lg:p-12 rounded-[2.5rem]">
+                                <div className="flex-1">
+                                    <p className="leading-relaxed opacity-90 mb-4">
+                                        We strive to use commercially acceptable means to protect your Personal Data. We utilize encryption in transit (SSL/TLS), secure password hashing regularly, and comprehensive rate limiting to prevent attacks.
+                                    </p>
+                                    <p className="leading-relaxed opacity-90">
+                                        You are strictly responsible for keeping your password secure and promptly reporting any suspicious activity on your account.
+                                    </p>
+                                </div>
+                                <div className="w-full md:w-48 aspect-square border border-primary-foreground/20 rounded-3xl flex items-center justify-center relative overflow-hidden group bg-black/10">
+                                    <Lock size={48} className="text-emerald-300 group-hover:scale-110 transition-transform duration-500" />
+                                    <div className="absolute inset-0 bg-emerald-500/10 animate-pulse" />
+                                </div>
+                            </div>
+                        </section>
 
-                        <h3>3.1 Security Measures</h3>
-                        <ul>
-                            <li>Encryption of data in transit (SSL/TLS)</li>
-                            <li>Secure password hashing (bcrypt)</li>
-                            <li>Regular security audits</li>
-                            <li>Access controls and authentication</li>
-                            <li>Rate limiting to prevent attacks</li>
-                        </ul>
-
-                        <h3>3.2 Your Responsibility</h3>
-                        <ul>
-                            <li>Keep your password secure</li>
-                            <li>Use strong, unique passwords</li>
-                            <li>Log out from shared devices</li>
-                            <li>Report suspicious activity</li>
-                        </ul>
-
-                        <h2 className="flex items-center gap-2">
-                            <Globe className="w-5 h-5" />
-                            4. Your Rights
-                        </h2>
-
-                        <h3>4.1 Access and Portability</h3>
-                        <ul>
-                            <li>Request a copy of your data</li>
-                            <li>Download your data in machine-readable format</li>
-                        </ul>
-
-                        <h3>4.2 Correction and Deletion</h3>
-                        <ul>
-                            <li>Update incorrect information</li>
-                            <li>Request deletion of your account and data</li>
-                        </ul>
-
-                        <h3>4.3 Restriction and Objection</h3>
-                        <ul>
-                            <li>Restrict processing of your data</li>
-                            <li>Object to processing for marketing purposes</li>
-                        </ul>
-
-                        <div className="bg-accent/50 p-4 rounded-lg not-prose my-6">
-                            <p className="text-sm font-semibold mb-2">To exercise your rights:</p>
-                            <p className="text-sm">
-                                Email:{" "}
-                                <a href="mailto:privacy@primeone.space" className="text-primary hover:underline">
-                                    privacy@primeone.space
-                                </a>
-                            </p>
-                        </div>
-
-                        <h2>5. GDPR Compliance (EU/EEA Residents)</h2>
-                        <p>If you are in the European Union or European Economic Area, you have additional rights:</p>
-                        <ul>
-                            <li><strong>Right to data portability</strong>: Receive your data in a structured format</li>
-                            <li><strong>Right to restrict processing</strong>: Limit how we use your data</li>
-                            <li><strong>Right to object</strong>: Object to certain types of processing</li>
-                            <li><strong>Right to lodge complaints</strong>: Contact your data protection authority</li>
-                        </ul>
-
-                        <h2>6. CCPA Compliance (California Residents)</h2>
-                        <p>California residents have the right to:</p>
-                        <ul>
-                            <li>Know what personal data we collect</li>
-                            <li>Request deletion of personal data</li>
-                            <li>Opt-out of data sales (we don't sell data)</li>
-                            <li>Non-discrimination for exercising rights</li>
-                        </ul>
-
-                        <h2>7. Cookies and Tracking</h2>
-
-                        <h3>7.1 Types of Cookies</h3>
-                        <ul>
-                            <li><strong>Essential</strong>: Required for Service functionality</li>
-                            <li><strong>Functional</strong>: Remember your preferences</li>
-                            <li><strong>Analytics</strong>: Understand usage patterns</li>
-                            <li><strong>Marketing</strong>: Deliver relevant ads (with consent)</li>
-                        </ul>
-
-                        <h3>7.2 Managing Cookies</h3>
-                        <p>
-                            You can adjust your browser settings to block cookies. Note that some features may not work without cookies.
-                        </p>
-
-                        <h2>8. Data Retention</h2>
-                        <ul>
-                            <li><strong>Active Accounts</strong>: Data retained while your account is active</li>
-                            <li><strong>Inactive Accounts</strong>: Data deleted after 2 years of inactivity</li>
-                            <li><strong>Booking Records</strong>: Retained for 7 years for tax/legal purposes</li>
-                            <li><strong>Marketing Data</strong>: Until you unsubscribe or withdraw consent</li>
-                        </ul>
-
-                        <h2>9. Children's Privacy</h2>
-                        <ul>
-                            <li>Our Service is not intended for children under 18</li>
-                            <li>We do not knowingly collect data from children</li>
-                            <li>If we discover such data, we will delete it promptly</li>
-                        </ul>
-
-                        <h2>10. International Data Transfers</h2>
-                        <p>
-                            Your data may be transferred to servers outside your country. We ensure adequate protection through
-                            standard contractual clauses and adequacy decisions.
-                        </p>
-
-                        <h2>11. Changes to This Policy</h2>
-                        <ul>
-                            <li>We may update this Privacy Policy</li>
-                            <li>Material changes will be notified via email</li>
-                            <li>Continued use after changes constitutes acceptance</li>
-                        </ul>
-
-                        <h2>12. Contact Us</h2>
-                        <div className="bg-accent/50 p-4 rounded-lg not-prose">
-                            <p className="font-semibold mb-2">Data Protection Officer</p>
-                            <p className="text-sm">PrimeOne Coworking Space</p>
-                            <p className="text-sm">146B, Goodshed Road, Thonikkal</p>
-                            <p className="text-sm">Vavuniya, Sri Lanka</p>
-                            <p className="text-sm mt-2">
-                                <strong>Email:</strong>{" "}
-                                <a href="mailto:privacy@primeone.space" className="text-primary hover:underline">
-                                    privacy@primeone.space
-                                </a>
-                            </p>
-                            <p className="text-sm">
-                                <strong>Phone:</strong> +94 70 623 3612
-                            </p>
-                            <p className="text-sm">
-                                <strong>Website:</strong>{" "}
-                                <a href="https://primeone.space" className="text-primary hover:underline">
-                                    https://primeone.space
-                                </a>
-                            </p>
-                        </div>
-
-                        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded mt-8 not-prose">
-                            <p className="text-sm font-medium">
-                                By using our Service, you consent to this Privacy Policy and our collection and use of information as described.
-                            </p>
-                            <p className="text-sm mt-2">
-                                For privacy questions or to exercise your rights, contact:{" "}
-                                <a href="mailto:privacy@primeone.space" className="text-primary hover:underline">
-                                    privacy@primeone.space
-                                </a>
-                            </p>
-                        </div>
-
-                        <div className="flex gap-4 mt-8 not-prose">
-                            <Link href="/terms">
-                                <button className="text-sm text-primary hover:underline">Terms of Service</button>
-                            </Link>
-                            <Link href="/refund-policy">
-                                <button className="text-sm text-primary hover:underline">Refund Policy</button>
-                            </Link>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                        {/* Contact */}
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-bold uppercase tracking-tight text-foreground border-b border-border pb-4 font-mono text-sm tracking-[0.3em]">Contact Us</h2>
+                            <p>If you have any questions or wish to officially exercise your privacy rights, contact us:</p>
+                            <div className="bg-background p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between group cursor-pointer border border-border shadow-md gap-6">
+                                <div>
+                                    <p className="text-[10px] font-mono uppercase tracking-[0.5em] opacity-50 mb-2">Support & Legal</p>
+                                    <a href="mailto:privacy@primeone.space" className="text-xl md:text-2xl font-bold tracking-tighter text-foreground hover:underline">
+                                        privacy@primeone.space
+                                    </a>
+                                </div>
+                                <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shrink-0">
+                                    <Mail size={20} />
+                                </div>
+                            </div>
+                            <div className="mt-8 flex flex-wrap gap-4 pt-8">
+                                <Link href="/terms" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Terms of Service</Link>
+                                <span className="opacity-30">|</span>
+                                <Link href="/refund-policy" className="text-sm font-mono uppercase tracking-widest hover:text-primary underline underline-offset-4">Refund Policy</Link>
+                            </div>
+                        </section>
+                    </motion.div>
+                </div>
+            </main>
         </div>
     );
 }

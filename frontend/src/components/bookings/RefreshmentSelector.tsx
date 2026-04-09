@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Coffee, Pizza, CupSoda, Minus, Plus, Loader2 } from "lucide-react";
 import { baseURL } from "@/lib/auth-client";
+import { fixImageUrl } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Refreshment {
@@ -116,32 +117,50 @@ export function RefreshmentSelector({ onSelectionChange }: RefreshmentSelectorPr
 }
 
 function RefreshmentCard({ item, quantity, onUpdate }: { item: Refreshment, quantity: number, onUpdate: (id: number, d: number) => void }) {
+    // Determine beautiful image
+    const defaultImage = item.category === 'cool_beverages' ? '/cool_drinks_thumb.png' :
+        item.category === 'food' ? '/food_thumb.png' :
+            '/coffee_thumb.png';
+
+    const hasCustomImage = item.image_url &&
+        (item.image_url.includes('/uploads/') || item.image_url.startsWith('http'));
+
+    const imageUrl = hasCustomImage ? fixImageUrl(item.image_url!) : defaultImage;
+
     return (
-        <Card className={`border transition-all duration-200 ${quantity > 0 ? 'border-primary ring-1 ring-primary bg-primary/5' : 'hover:border-primary/50'}`}>
-            <CardContent className="p-4 flex items-center justify-between gap-4">
-                <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium">{item.name}</h4>
-                        {quantity > 0 && <Badge className="h-5 px-1.5 min-w-[1.25rem]">{quantity}</Badge>}
+        <Card className={`relative border transition-all duration-200 overflow-hidden group ${quantity > 0 ? 'border-primary ring-1 ring-primary' : 'hover:border-primary/50'}`}>
+            {/* Background Image */}
+            <div className="absolute inset-0 w-full h-full z-0">
+                <img src={imageUrl} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 w-full h-full"></div>
+            </div>
+
+            <CardContent className="relative z-10 p-3 sm:p-5 flex items-end justify-between gap-2 sm:gap-4 min-h-[110px] sm:min-h-[140px]">
+                <div className="flex-1 pl-0 pr-2 pb-1 text-white">
+                    <div className="flex items-start sm:items-center flex-col sm:flex-row gap-1 sm:gap-2 mb-0.5 sm:mb-1">
+                        <div className="flex items-center gap-1.5 drop-shadow-md">
+                            <h4 className="font-semibold text-sm sm:text-[17px] leading-tight break-words line-clamp-2">{item.name}</h4>
+                        </div>
+                        {quantity > 0 && <Badge className="h-5 sm:h-6 px-1.5 sm:px-2 min-w-min text-[10px] sm:text-xs shrink-0 w-max bg-primary hover:bg-primary border-none shadow-sm">{quantity}</Badge>}
                     </div>
-                    <p className="text-sm text-muted-foreground font-medium">LKR {item.price}</p>
+                    <p className="text-xs sm:text-sm text-zinc-300 font-medium drop-shadow-md">LKR {item.price}</p>
                 </div>
 
-                <div className="flex items-center gap-3 bg-background border rounded-full p-1 shadow-sm">
+                <div className="flex items-center gap-1 sm:gap-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-full p-1 shadow-xl flex-shrink-0 text-white">
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 rounded-full hover:bg-muted"
+                        className="h-6 w-6 sm:h-7 sm:w-7 rounded-full hover:bg-muted shrink-0"
                         onClick={() => onUpdate(item.id, -1)}
                         disabled={quantity === 0}
                     >
                         <Minus className="w-3 h-3" />
                     </Button>
-                    <span className="w-4 text-center text-sm font-semibold">{quantity}</span>
+                    <span className="w-3 sm:w-4 text-center text-xs sm:text-sm font-semibold">{quantity}</span>
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 rounded-full hover:bg-muted"
+                        className="h-6 w-6 sm:h-7 sm:w-7 rounded-full hover:bg-muted shrink-0"
                         onClick={() => onUpdate(item.id, 1)}
                     >
                         <Plus className="w-3 h-3" />

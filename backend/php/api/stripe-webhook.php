@@ -81,7 +81,7 @@ switch ($event->type) {
                 
                 if ($booking) {
                     // Send confirmation email
-                    require_once __DIR__ . '/../send_email_brevo.php';
+                    require_once __DIR__ . '/../send_email.php';
                     
                     $bookingDetails = [
                         'id' => $booking['id'],

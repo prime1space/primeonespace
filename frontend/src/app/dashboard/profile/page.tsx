@@ -45,7 +45,7 @@ export default function ProfilePage() {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await fetch(`${baseURL}/user_profile.php`, {
+      const res = await fetch(`${baseURL}/user/profile`, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("bearer_token")}`
         }
@@ -119,7 +119,7 @@ export default function ProfilePage() {
         payload.new_password = passwords.new;
       }
 
-      const res = await fetch(`${baseURL}/user_profile.php`, {
+      const res = await fetch(`${baseURL}/user/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +146,7 @@ export default function ProfilePage() {
 
   if (isPending) {
     return (
-      <div className="py-12">
+      <div className="pt-28 pb-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <Skeleton className="h-12 w-64 mb-8" />
           <Skeleton className="h-96" />
@@ -162,7 +162,7 @@ export default function ProfilePage() {
     .toUpperCase() || "U";
 
   return (
-    <div className="py-12">
+    <div className="pt-28 pb-12">
       <div className="container mx-auto px-4 max-w-2xl">
         <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
 

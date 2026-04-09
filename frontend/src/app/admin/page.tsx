@@ -36,6 +36,7 @@ import { SpacesManager } from "@/components/admin/SpacesManager";
 import { SettingsManager } from "@/components/admin/SettingsManager";
 import { OffersManager } from "@/components/admin/OffersManager";
 import { EventsManager } from "@/components/admin/EventsManager";
+import { RefreshmentsManager } from "@/components/admin/RefreshmentsManager";
 
 interface Booking {
   id: number;
@@ -121,15 +122,18 @@ export default function AdminPage() {
       // Calculate stats
       const total = bookingsArray.length;
       const revenue = bookingsArray
-        .filter((b: Booking) => b.paymentStatus === "completed")
+        // Count both "paid" (card payment) and "completed" (cash confirmed) bookings
+        .filter((b: Booking) => b.paymentStatus === "completed" || b.paymentStatus === "paid")
         .reduce((sum: number, b: Booking) => sum + b.totalAmount, 0);
       const pending = bookingsArray.filter((b: Booking) => b.bookingStatus === "pending").length;
+      // Unique member count from real booking data
+      const uniqueMembers = new Set(bookingsArray.map((b: Booking) => b.userEmail)).size;
 
       setStats({
         totalBookings: total,
         totalRevenue: revenue,
         pendingBookings: pending,
-        activeMembers: 12, // Mock data
+        activeMembers: uniqueMembers,
       });
     } catch (error: any) {
       console.error("Error fetching bookings:", error);
@@ -210,7 +214,7 @@ export default function AdminPage() {
 
   if (isPending || loading) {
     return (
-      <div className="py-12">
+      <div className="pt-32 pb-12">
         <div className="container mx-auto px-4">
           <Skeleton className="h-12 w-64 mb-8" />
           <div className="grid md:grid-cols-4 gap-6 mb-12">
@@ -248,6 +252,7 @@ export default function AdminPage() {
             <TabsTrigger value="events">Events</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
             <TabsTrigger value="announcements">Announcements</TabsTrigger>
+            <TabsTrigger value="refreshments">Refreshments</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard">
@@ -528,6 +533,10 @@ export default function AdminPage() {
 
           <TabsContent value="announcements">
             <AnnouncementsManager />
+          </TabsContent>
+
+          <TabsContent value="refreshments">
+            <RefreshmentsManager />
           </TabsContent>
         </Tabs>
       </div>

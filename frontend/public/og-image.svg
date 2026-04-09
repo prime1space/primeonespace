@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#14212B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a2f3e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff4917;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b3d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Decorative circle blobs -->
+  <circle cx="1050" cy="120" r="280" fill="#ff4917" opacity="0.08" />
+  <circle cx="150"  cy="520" r="200" fill="#3b82f6" opacity="0.05" />
+
+  <!-- Orange accent bar -->
+  <rect x="80" y="80" width="6" height="200" rx="3" fill="url(#accent)" />
+
+  <!-- Logo / Brand -->
+  <text x="110" y="160" font-family="Arial, sans-serif" font-weight="900" font-size="72" fill="white" letter-spacing="-2">PrimeOne</text>
+  <text x="110" y="230" font-family="Arial, sans-serif" font-weight="900" font-size="72" fill="#ff4917" letter-spacing="-2">Space</text>
+
+  <!-- Tagline -->
+  <text x="110" y="300" font-family="Arial, sans-serif" font-weight="400" font-size="28" fill="#94a3b8">Premium Coworking in Vavuniya, Sri Lanka</text>
+
+  <!-- Divider line -->
+  <rect x="110" y="335" width="480" height="2" rx="1" fill="#ff4917" opacity="0.4" />
+
+  <!-- Feature badges -->
+  <rect x="110" y="365" width="170" height="44" rx="22" fill="#ff4917" opacity="0.15" />
+  <text x="195" y="393" font-family="Arial, sans-serif" font-size="18" fill="#ff6b3d" text-anchor="middle">⚡ Starlink WiFi</text>
+
+  <rect x="295" y="365" width="170" height="44" rx="22" fill="#ff4917" opacity="0.15" />
+  <text x="380" y="393" font-family="Arial, sans-serif" font-size="18" fill="#ff6b3d" text-anchor="middle">🏢 Hot Desks</text>
+
+  <rect x="480" y="365" width="200" height="44" rx="22" fill="#ff4917" opacity="0.15" />
+  <text x="580" y="393" font-family="Arial, sans-serif" font-size="18" fill="#ff6b3d" text-anchor="middle">📅 Flexible Plans</text>
+
+  <!-- URL -->
+  <text x="110" y="500" font-family="Arial, sans-serif" font-size="24" fill="#64748b">primeone.space</text>
+
+  <!-- Right decorative element -->
+  <rect x="780" y="60" width="340" height="510" rx="20" fill="white" opacity="0.03" />
+  <text x="950" y="280" font-family="Arial, sans-serif" font-weight="900" font-size="180" fill="white" opacity="0.04" text-anchor="middle">P1</text>
+  <text x="950" y="380" font-family="Arial, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">Book your workspace today</text>
+  <rect x="850" y="400" width="200" height="52" rx="26" fill="#ff4917" />
+  <text x="950" y="432" font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="white" text-anchor="middle">Book Now →</text>
+</svg>

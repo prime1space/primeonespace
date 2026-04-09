@@ -6,7 +6,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method == 'GET') {
     try {
-        $stmt = $conn->prepare("SELECT id, space_type as spaceType, hourly_rate as hourlyRate, daily_rate as dailyRate, monthly_rate as monthlyRate, features FROM pricing");
+        $stmt = $conn->prepare("SELECT id, space_type as spaceType, hourly_rate as hourlyRate, rate_2h as rate2h, rate_3h as rate3h, rate_4h_plus as rate4hPlus, daily_rate as dailyRate, monthly_rate as monthlyRate, features FROM pricing");
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
@@ -15,6 +15,13 @@ if ($method == 'GET') {
             if (isset($row['features']) && is_string($row['features'])) {
                 $row['features'] = json_decode($row['features']);
             }
+            // Ensure numeric values are floats
+            $row['hourlyRate'] = (float)$row['hourlyRate'];
+            $row['rate2h'] = $row['rate2h'] !== null ? (float)$row['rate2h'] : null;
+            $row['rate3h'] = $row['rate3h'] !== null ? (float)$row['rate3h'] : null;
+            $row['rate4hPlus'] = $row['rate4hPlus'] !== null ? (float)$row['rate4hPlus'] : null;
+            $row['dailyRate'] = (float)$row['dailyRate'];
+            $row['monthlyRate'] = (float)$row['monthlyRate'];
         }
         
         echo json_encode($results);
@@ -39,9 +46,12 @@ else if ($method == 'PUT') {
     }
 
     try {
-        $stmt = $conn->prepare("UPDATE pricing SET hourly_rate = ?, daily_rate = ?, monthly_rate = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE pricing SET hourly_rate = ?, rate_2h = ?, rate_3h = ?, rate_4h_plus = ?, daily_rate = ?, monthly_rate = ? WHERE id = ?");
         $stmt->execute([
             $data['hourlyRate'],
+            $data['rate2h'] ?? null,
+            $data['rate3h'] ?? null,
+            $data['rate4hPlus'] ?? null,
             $data['dailyRate'],
             $data['monthlyRate'],
             $data['id']
