@@ -39,7 +39,7 @@ export default function Footer() {
             <Link href="/" className="inline-block group">
               <img src="/logo.png" alt="PrimeOne Logo" className="h-24 md:h-40 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
             </Link>
-            <p className="text-zinc-500 text-sm leading-relaxed max-w-xs font-medium -mt-8 md:-mt-14 relative z-10 mx-auto lg:mx-0">
+            <p className="text-zinc-500 text-sm leading-relaxed max-w-xs font-medium -mt-10 md:-mt-24 lg:-mt-20 relative z-10 mx-auto lg:mx-0">
               Vavuniya's premium coworking space. We provide a professional environment for innovators, entrepreneurs, and teams to focus, collaborate, and grow.
             </p>
             <div className="flex justify-center lg:justify-start gap-4 pt-2">
