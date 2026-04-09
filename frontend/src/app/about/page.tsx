@@ -238,7 +238,7 @@ export default function AboutPage() {
                 <Link href="/contact">Book a Free Tour</Link>
               </Button>
               <Button size="lg" variant="outline" className="rounded-full px-8 w-full sm:w-auto" asChild>
-                <Link href="/spaces">View Memberships</Link>
+                <Link href="/spaces">View Spaces</Link>
               </Button>
             </div>
           </div>
