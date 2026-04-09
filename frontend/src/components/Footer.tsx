@@ -120,11 +120,11 @@ export default function Footer() {
             <div className="space-y-4 lg:space-y-6 flex flex-col items-center sm:items-start">
               <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-900 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 sm:after:left-0 sm:after:translate-x-0 after:w-8 after:h-0.5 after:bg-primary">Visit Us</h4>
               <div className="space-y-4 pt-2 text-sm text-zinc-500 flex flex-col items-center sm:items-start text-center sm:text-left">
-                <p className="leading-relaxed font-medium sm:pt-1 text-center sm:text-left">
+                <p className="leading-relaxed font-medium text-center sm:text-left">
                   146B, Goodshed Road,<br className="hidden sm:block" />
                   Thonikkal, Vavuniya, NP, Sri Lanka.
                 </p>
-                <div className="space-y-3 flex flex-col w-full items-center sm:items-start pt-1">
+                <div className="space-y-4 flex flex-col w-full items-center sm:items-start">
                   <a href="tel:+94772228507" className="hover:text-primary transition-colors font-medium whitespace-nowrap">
                     +94 77 222 8507
                   </a>
